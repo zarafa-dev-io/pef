@@ -41,7 +41,11 @@ function oldStatusAt(sinceRef: string, file: string, root: string): string | nul
   const rel = path.relative(gitRoot, file).replace(/\\/g, '/');
   let old: string;
   try {
-    old = execFileSync('git', ['show', `${sinceRef}:${rel}`], { cwd: gitRoot, encoding: 'utf8' });
+    old = execFileSync('git', ['show', `${sinceRef}:${rel}`], {
+      cwd: gitRoot,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'], // a missing path at the ref is expected, keep git quiet
+    });
   } catch {
     return 'absent'; // file did not exist at the reference: any initial status is allowed
   }
