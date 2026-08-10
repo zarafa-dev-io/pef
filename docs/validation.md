@@ -1,85 +1,119 @@
 # Le moteur de validation `pef`
 
-Script Node/TypeScript embarqué dans `tools/validate/` de chaque repo PEF (portage Go à iso-contrat prévu au lot 5). **100 % local et déterministe** : aucun appel LLM, aucun réseau (NFR-1/2) — la CI n'est qu'un renfort, le poste de travail est le mode de référence.
+Le moteur est un petit outil en ligne de commande, embarqué dans chaque repo PEF (`tools/validate/`). Il est **100 % local et déterministe** : aucun appel IA, aucun réseau — les mêmes fichiers en entrée donnent toujours le même rapport. La CI ne fait que le rejouer ; votre poste est le mode de référence.
+
+## Préparer et lancer
 
 ```bash
-cd tools/validate && npm install   # une fois
-npm run pef -- <commande> [options]
+cd tools/validate
+npm install                      # une seule fois
+npm run pef -- <commande>        # le -- est OBLIGATOIRE
 ```
 
-## `validate` — les erreurs bloquantes
+Sans argument, `npm run pef --` affiche l'aide. Les commandes : `validate`, `coverage`, `trace`, `impact`, `signal`.
 
-```bash
-npm run pef -- validate [--since <ref-git>] [--root <dir>]
+| Option | Commandes | Effet |
+|---|---|---|
+| `--since <ref-git>` | validate | active les contrôles de **transitions** en comparant à un état git antérieur |
+| `--strict` | coverage | code de sortie 1 si au moins un trou (pour bloquer une CI) |
+| `--root <dir>` | toutes | analyser un autre répertoire que `product/` |
+| `--apply` | signal | exécuter réellement (par défaut : simulation) |
+
+## Lire un rapport
+
+```
+backlog/US-002-recherche.us.md:10  PEF010  entering workflowState "Todo" requires asset status "Approved" (current: "Draft") — content must be validated before execution
+
+26 asset(s) checked, 1 error(s).
 ```
 
-Rapport `fichier:ligne  règle  message`, code de sortie 1 en cas d'erreur (intégrable en CI).
+Se lit : *fichier* `:` *ligne* — *règle* — *explication*. Code de sortie : `0` si tout est bon, `1` sinon (c'est ce que la CI regarde). La ligne indiquée est celle du champ en cause dans le fichier.
 
-| Règle | Contrôle |
-|---|---|
-| PEF001 | Front matter YAML présent et lisible (BOM/CRLF tolérés) |
-| PEF002 | Conformité au JSON Schema (`schemas/0.1/asset.schema.json`) : clés obligatoires, enums, semver, clés inconnues rejetées |
-| PEF003 | Préfixe de l'ID cohérent avec `assetType`/`workItemType` |
-| PEF004 | Nom de fichier `<ID>-<slug>.<suffixe>.md` (EF-35) |
-| PEF005 | Unicité des IDs dans tout le repo |
-| PEF006 | Toute référence résout vers un Asset existant |
-| PEF007 | Pas d'auto-référence |
-| PEF008 | Transitions de `status` autorisées — nécessite `--since` |
-| PEF009 | Transitions de `workflowState` adjacentes — nécessite `--since` |
-| PEF010 | Passage à `Todo` : contenu `Approved` exigé |
-| PEF011 | Passage à `Validated` : AC de la chaîne aval `Approved` exigées |
+## `validate` — les 11 règles bloquantes
 
-`--since <ref>` compare le front matter courant à celui de la référence git (ex. `--since origin/main` dans une PR, `--since HEAD` avant commit).
+### Structure et identité
 
-## `coverage` — les trous de traçabilité
+| Règle | Contrôle | Exemple d'erreur | Correction |
+|---|---|---|---|
+| PEF001 | Le front matter existe et se lit | `missing YAML front matter block (---)` | encadrez l'en-tête de deux lignes `---` ; vérifiez l'indentation YAML |
+| PEF002 | Conformité au JSON Schema | `/status must be equal to one of the allowed values` | valeur hors liste ou clé inconnue (faute de frappe) — comparez au [modèle](reference.md) |
+| PEF003 | Préfixe d'ID ↔ type | `id "REQ-042" does not match expected prefix "SPEC-"` | l'ID ne correspond pas à l'`assetType` : corrigez l'un ou l'autre |
+| PEF004 | Nom de fichier (EF-35) | `file name "spec42.md" does not follow "<ID>-<slug>.spec.md"` | renommez : `SPEC-042-mon-slug.spec.md` |
+| PEF005 | Unicité des IDs | `duplicate id "AC-003" (also used by …)` | copie de fichier sans changer l'`id` : prenez le premier numéro libre |
 
-```bash
-npm run pef -- coverage [--strict]   # --strict : exit 1 si trous
-```
+### Relations
 
-| Catégorie | Signification |
-|---|---|
-| `requirement-without-spec` | Requirement sans Specification qui le `satisfies` |
-| `requirement-without-ac` | Requirement non couvert par des AC (via ses Specifications) |
-| `spec-without-ac` | Specification sans AC qui la `refines` |
-| `ac-without-testcase` | AC vérifiée par aucun TestCase |
-| `epic-without-userstory` | Epic sans UserStory qui le `refines` |
-| `userstory-without-ac` | UserStory sans AC dans sa chaîne aval |
-| `bug-without-regression-test` | Bug sans `dependsOn` vers un TestCase de non-régression |
-| `workitem-validated-without-testcase` | WorkItem `Validated` sans TestCase dans sa chaîne |
-| `workitem-inprogress-upstream-draft` | WorkItem `InProgress` dont un Asset amont est repassé en `Draft` |
-| `goal-without-workitem` | Goal qu'aucun WorkItem ne sert (chaîne aval vide) |
-| `roadmap-without-goal` | Élément de roadmap qui ne `satisfies` aucun Goal |
-| `orphan-asset` | Asset sans aucune relation (hors Decisions) |
-| `broken-ref` | Référence cassée (doublonne PEF006, vue « couverture ») |
+| Règle | Contrôle | Exemple d'erreur | Correction |
+|---|---|---|---|
+| PEF006 | Toute référence résout | `unresolved reference "refines: SPEC-999"` | faute de frappe dans l'ID, ou la cible n'existe pas encore |
+| PEF007 | Pas d'auto-référence | `asset references itself via "refines"` | retirez l'ID de sa propre liste |
+
+### Transitions (nécessitent `--since <ref-git>`)
+
+Ces règles comparent le front matter actuel à celui d'un état git antérieur — typiquement `--since origin/main` dans une PR, ou `--since HEAD` avant de committer.
+
+| Règle | Contrôle | Exemple d'erreur | Correction |
+|---|---|---|---|
+| PEF008 | Transitions de `status` | `status transition "Generated" -> "Approved" is not allowed` | passez par `Review` : la relecture humaine n'est pas optionnelle |
+| PEF009 | Transitions de `workflowState` adjacentes | `workflowState transition "Drafting" -> "Validated" is not allowed` | avancez étape par étape : Todo, InProgress, puis Validated |
+| PEF010 | → `Todo` exige contenu `Approved` | `entering "Todo" requires asset status "Approved"` | faites d'abord approuver le contenu du WorkItem |
+| PEF011 | → `Validated` exige AC `Approved` | `…requires linked AcceptanceCriteria to be "Approved" (not approved: AC-007)` | faites relire et approuver les AC citées |
+
+> Pourquoi `--since` ? Une transition est un **changement** : il faut un point de comparaison. Sans `--since`, ces règles sont simplement inactives — le reste est toujours contrôlé.
+
+## `coverage` — les 13 trous de traçabilité
+
+La couverture ne bloque pas (sauf `--strict`) : elle rend visibles les **dettes**. Chaque catégorie, pourquoi c'est un problème, et le geste qui corrige :
+
+| Catégorie | Le problème | Le geste |
+|---|---|---|
+| `requirement-without-spec` | Une exigence que rien ne décrit : invérifiable | écrire la Specification (`satisfies`) |
+| `requirement-without-ac` | Exigence jamais reliée à un critère vérifiable | dérouler Spec → AC (`/generate-acceptance-criteria`) |
+| `spec-without-ac` | Une spec sans critères : « fini » ne veut rien dire | `/generate-acceptance-criteria` |
+| `ac-without-testcase` | Un critère sans preuve | `/generate-test-cases` |
+| `epic-without-userstory` | Un thème jamais découpé : rien n'avancera | `/draft-user-stories` |
+| `userstory-without-ac` | Une US sans définition de « fait » | rattacher/écrire les AC |
+| `bug-without-regression-test` | Un bug sans filet : il reviendra | créer le TC et le lier en `dependsOn` |
+| `workitem-validated-without-testcase` | « Validé » sans preuve | rattacher les tests qui l'attestent |
+| `workitem-inprogress-upstream-draft` | Le sol bouge sous un travail en cours | statuer sur l'amont repassé en Draft avant de continuer |
+| `goal-without-workitem` | Un objectif que personne ne sert : vœu pieux | `/draft-roadmap` puis `/draft-epics` |
+| `roadmap-without-goal` | Un élément de roadmap sans objectif : pourquoi le faire ? | relier au Goal, ou questionner l'élément |
+| `orphan-asset` | Un Asset relié à rien : personne ne le trouvera | ajouter la relation qui le situe (les Decisions sont exemptées) |
+| `broken-ref` | Référence cassée (vue couverture de PEF006) | corriger l'ID cible |
 
 Les Assets `Deprecated` sont exclus de l'analyse.
 
-## `trace` et `impact` — naviguer le graphe
+## `trace` — d'où ça vient, où ça va
 
 ```bash
-npm run pef -- trace SPEC-001    # chaîne amont + aval, arborescente
-npm run pef -- impact SPEC-001   # fermeture transitive aval ; tests signalés ⚠
+npm run pef -- trace SPEC-001
 ```
 
-`trace` répond à « d'où vient / où va cet Asset » ; `impact` répond à « qu'est-ce que je casse si je modifie ceci » (EF-24) — à exécuter avant toute modification de Specification et à citer dans la PR.
+Affiche l'arborescence **amont** (ce que l'Asset référence, de proche en proche : exigence, user story, epic, roadmap, goal, vision) puis **aval** (tout ce qui s'appuie sur lui : AC, plans, cas de test). Utile avant une réunion (« d'où sort cette exigence ? ») comme en audit (« quels tests couvrent cette feature ? »).
 
-## `signal` — les issues d'équipe (EF-33)
+## `impact` — qu'est-ce que je casse si je change ceci ?
 
 ```bash
-npm run pef -- signal            # dry-run : liste ce qui serait créé/fermé
-npm run pef -- signal --apply    # applique via le CLI gh
+npm run pef -- impact SPEC-001
 ```
 
-Transforme les rapports en **issues GitHub actionnables** : une issue par (Asset, type d'action), jamais dupliquée, **fermée automatiquement** quand le contrôle déterministe constate que l'écart a disparu. Types actuels : `review-required` (statut `Review`/`Generated`), `coverage-gap`, `broken-ref`. Fonctionne depuis le poste (`gh` authentifié) ; la CI peut le relayer si l'environnement l'autorise.
+Liste la fermeture aval complète — tout ce qui, directement ou indirectement, s'appuie sur l'Asset — avec les tests marqués `⚠`. **Réflexe à prendre avant toute modification de Specification**, et à coller dans la description de la PR.
 
-## Deux modes d'exécution (contrainte §7 du PRD)
+## `signal` — transformer les rapports en travail d'équipe
 
-| Mode | Quand | Quoi |
-|---|---|---|
-| **Local** (référence) | poste du PO, toujours disponible | toutes les commandes, y compris `signal --apply` |
-| **CI** (renfort) | si l'environnement l'autorise | `validate` + `coverage` sur chaque PR (`.github/workflows/pef-validate.yml`) — jamais d'appel IA |
+```bash
+npm run pef -- signal            # simulation : liste ce qui serait fait
+npm run pef -- signal --apply    # exécute via le CLI gh
+```
+
+Pour chaque action humaine requise, une **issue GitHub** est créée : un Asset en `Review`/`Generated` → issue `review-required` ; un trou de couverture → `coverage-gap` ; une référence cassée → `broken-ref`. Règles : une seule issue ouverte par (Asset, type d'action), jamais dupliquée ; **fermeture automatique** quand le contrôle constate que l'écart a disparu ; chaque issue cite la commande de vérification.
+
+Prérequis : le CLI `gh` authentifié (`gh auth login`) et un remote GitHub.
+
+## La CI : un renfort, pas une dépendance
+
+`.github/workflows/pef-validate.yml` rejoue `validate` + `coverage` sur chaque PR et push. C'est un filet : tout fonctionne **sans** (contexte d'entreprise où la CI est restreinte — contrainte assumée du PRD §7). La CI n'exécute jamais d'appel IA.
 
 ## Performances
 
-Cible NFR-4 : `validate` < 2 s sur 1 000 Assets. L'implémentation actuelle parcourt le repo en une passe et tient largement la cible sur l'exemple.
+Cible : `validate` < 2 s sur 1 000 Assets (NFR-4). Une passe unique sur les fichiers ; largement tenu sur l'exemple.

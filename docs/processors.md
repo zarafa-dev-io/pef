@@ -1,79 +1,106 @@
 # Les Processors
 
-Un **Processor** est une capacité d'analyse, de création ou de transformation de Product Assets. Il peut être un humain, un agent IA, un prompt, un script, un MCP server… PEF définit son **contrat**, pas son implémentation (NFR-1) : tout Processor est substituable sans toucher aux Assets.
+Un **Processor** est une capacité d'analyse, de création ou de transformation de Product Assets. Ça peut être un prompt IA, un script, un service — ou un humain. PEF définit le **contrat** (ce qui entre, ce qui sort), jamais l'implémentation : c'est ce qui rend chaque Processor **remplaçable** sans toucher aux Assets.
+
+## Pour les novices : comment ça se présente concrètement ?
+
+Au MVP, les Processors sont des **prompt files GitHub Copilot** : des fichiers `.prompt.md` rangés dans `.github/prompts/` de votre repo. Concrètement :
+
+1. Ouvrez votre projet PEF dans VS Code (le **dossier**, pas un fichier isolé).
+2. Ouvrez le chat Copilot (`Ctrl+Alt+I` ou l'icône chat).
+3. Tapez `/` : la liste des prompts du repo apparaît (`/generate-acceptance-criteria`, `/refine-work-item`…).
+4. Choisissez-en un, précisez la cible (ex. `SPEC-001`), envoyez.
+
+Le Processor **lit alors les Assets directement dans le repo** — vous n'avez rien à copier-coller — et produit soit de nouveaux fichiers d'Assets, soit un rapport dans le chat. Vous gardez la main à chaque étape : Copilot vous montre les fichiers qu'il propose de créer avant d'écrire.
+
+> Le prompt n'apparaît pas en tapant `/` ? Vérifiez que le dossier ouvert contient bien `.github/prompts/` et que l'extension Copilot est à jour.
 
 ## Le contrat (EF-16)
 
 Chaque Processor est déclaré dans `processors/*.yaml` :
 
 ```yaml
-processor: GenerateTestCases
-version: "1.0"
+processor: GenerateTestCases        # son nom
+version: "1.0"                      # sa version (tracée dans la provenance ai:)
 description: >-
   Rédige les cas de test exécutables d'un plan de recette.
-inputs: [TestPlan, AcceptanceCriteria]
-outputs: [TestCase]
-activities: [Préparer la recette]
+inputs: [TestPlan, AcceptanceCriteria]    # ce qu'il consomme (des assetTypes)
+outputs: [TestCase]                       # ce qu'il produit (assetTypes, ou Report)
+activities: [Préparer la recette]         # à quelles activités il contribue
 implementation:
-  type: copilot-prompt
-  path: .github/prompts/generate-test-cases.prompt.md
+  type: copilot-prompt                    # l'implémentation de référence…
+  path: .github/prompts/generate-test-cases.prompt.md   # …substituable
 ```
 
-`inputs`/`outputs` sont des assetTypes (ou `Report` pour une sortie sans Asset). L'implémentation de référence du MVP est un **prompt file GitHub Copilot** (`/nom-du-prompt` en chat VS Code) — remplaçable par tout outil respectant le même contrat.
+Deux familles de sorties :
 
-## Les Processors livrés
+- **des Assets** — toujours créés en `status: Generated` avec leur provenance ;
+- **`Report`** — un rapport en chat, *aucun fichier créé* : pour les analyses où la décision doit rester humaine (refinement, cérémonies).
+
+## Les 13 Processors livrés
 
 ### Chaîne de test (lot 1)
 
-| Processor | Entrées → Sorties | Usage |
+| Prompt | Entrées → Sorties | Ce qu'il fait |
 |---|---|---|
-| `GenerateAcceptanceCriteria` | Specification + BR + NFR → AC | Dérive les critères : cas nominaux, limites, erreurs |
-| `GenerateTestPlan` | Specification + AC → TestPlan | Périmètre, stratégie, matrice de couverture |
-| `GenerateTestCases` | TestPlan + AC → TestCase | Cas exécutables : préconditions, étapes, résultat attendu |
+| `/generate-acceptance-criteria` | Specification + BR + NFR → AC | Dérive les critères : cas nominaux, limites, erreurs — chaque message d'erreur de la spec devient un scénario |
+| `/generate-test-plan` | Specification + AC → TestPlan | Périmètre, stratégie, matrice AC → TestCases |
+| `/generate-test-cases` | TestPlan + AC → TestCase | Cas exécutables par un testeur qui ne connaît pas le produit : préconditions, étapes, résultat attendu |
 
 ### Backlog (lot 2)
 
-| Processor | Entrées → Sorties | Usage |
+| Prompt | Entrées → Sorties | Ce qu'il fait |
 |---|---|---|
-| `DraftEpics` | Roadmap + Requirements → Epics | Découpe un périmètre en ensembles livrables |
-| `DraftUserStories` | Epic + Specifications → US + AC | Découpe un Epic, AC incluses |
-| `QualifyBug` | description brute (+ Spec/BR/AC) → Bug + TC | Qualifie, situe les Assets défaillants (`impacts`), propose le test de non-régression (`dependsOn`) |
-| `RefineWorkItem` | WorkItem → **Report** | Rapport de refinement : ambiguïtés, AC manquants, dépendances, taille, questions — **ne crée aucun Asset** (EF-20) |
+| `/draft-epics` | Roadmap + Requirements → Epics | Découpe un périmètre en thèmes livrables, priorité MoSCoW justifiée |
+| `/draft-user-stories` | Epic + Specifications → US + AC | Découpe un Epic ; signale les zones sans spec au lieu d'inventer |
+| `/qualify-bug` | description brute → Bug + TC | Reformule (observé vs attendu), identifie les Assets défaillants (`impacts`), propose le test de non-régression (`dependsOn`) |
+| `/refine-work-item` | WorkItem → **Report** | Ambiguïtés, AC manquants, règles absentes, dépendances, taille, questions — et une recommandation ; **ne crée rien** |
 
 ### Amont et cérémonies (lot 3)
 
-| Processor | Entrées → Sorties | Usage |
+| Prompt | Entrées → Sorties | Ce qu'il fait |
 |---|---|---|
-| `DraftVision` | notes libres (+ Personas) → Vision + Goals | Structure la matière brute ; Goals mesurables |
-| `DraftRoadmap` | Vision + Goals → éléments de Roadmap | Un Asset par élément (DEC-005), critère de sortie inclus |
-| `DraftPersona` | notes d'entretiens → Persona | Fidèle aux notes ; hypothèses non étayées signalées |
-| `PrepareSprintPlanning` | WorkItems + Goals → **Report** | Candidats prêts, dépendances, risques, agenda — jamais de capacité/vélocité |
-| `PrepareSprintReview` | WorkItems + AC + Roadmap → **Report** | Livré vs prévu, scénarios de démo depuis les AC, impact roadmap |
-| `DraftReleaseNotes` | WorkItems `Validated` + AC → Release | Langage métier ; `dependsOn` les WorkItems livrés |
+| `/draft-vision` | notes libres (+ Personas) → Vision + Goals | Structure la matière brute ; Goals mesurables ; non-objectifs explicités |
+| `/draft-roadmap` | Vision + Goals → éléments de Roadmap | Un Asset par élément (DEC-005), critère de sortie inclus |
+| `/draft-persona` | notes d'entretiens → Persona | Fidèle aux notes ; les hypothèses non étayées sont signalées, pas affirmées |
+| `/prepare-sprint-planning` | WorkItems + Goals → **Report** | Candidats prêts triés, dépendances, risques, agenda — jamais de capacité/vélocité |
+| `/prepare-sprint-review` | WorkItems + AC + Roadmap → **Report** | Livré vs prévu, scénarios de démo tirés des AC, impact roadmap |
+| `/draft-release-notes` | WorkItems `Validated` + AC → Release | Langage métier ; seuls les WorkItems validés entrent |
 
-Les sorties `Report` respectent EF-22 : PEF **prépare** les cérémonies, il ne les décide pas.
+## Le circuit complet d'une génération
 
-## Le circuit d'une génération
+```
+ 1. /generate-acceptance-criteria SPEC-001          (vous, dans le chat)
+ 2. Le Processor lit SPEC-001, BR-001, NFR-001      (dans le repo)
+ 3. Il crée AC-003, AC-004 en status: Generated     (avec bloc ai:)
+ 4. npm run pef -- validate                          → tout est conforme ?
+ 5. npm run pef -- signal --apply                    → issues « review-required »
+ 6. Vous ouvrez une PR et relisez                    (corriger / rejeter / garder)
+ 7. Generated → Review → Approved                    (2 commits ; PEF008 bloque le saut)
+ 8. ai.reviewed: true + reviewedBy + reviewedAt      (la provenance est complète)
+ 9. La CI valide la PR ; au merge, signal ferme les issues
+```
 
-1. Le PO lance le prompt (`/draft-user-stories` …) dans VS Code.
-2. Le Processor lit les Assets d'entrée **dans le repo** (pas de contexte recopié à la main).
-3. Il produit des Assets en `status: Generated`, avec la provenance :
-   ```yaml
-   ai:
-     generated: true
-     processor: DraftUserStories
-     processorVersion: "1.0"
-     reviewed: false
-   ```
-4. `pef validate` + `pef coverage` contrôlent la production.
-5. `pef signal` ouvre une issue `review-required` par Asset généré.
-6. Revue humaine par PR : `Generated → Review → Approved` (le saut direct est bloqué, PEF008). Le bloc `ai:` est complété (`reviewed: true`, `reviewedBy`, `reviewedAt`).
-7. L'issue se ferme automatiquement au `signal` suivant.
+Chaque étape laisse une trace dans Git : c'est l'auditabilité demandée par la gouvernance (« qui a généré quoi, qui a validé quoi »).
 
-## Écrire un nouveau Processor
+## Les invariants que tout Processor respecte
 
-1. Déclarer le contrat YAML dans `processors/`.
-2. Fournir l'implémentation (prompt file dans `.github/prompts/`, ou tout autre outil).
-3. Respecter les invariants : sorties en `Generated` + bloc `ai:`, IDs au premier numéro libre, nommage EF-35, aucune référence inventée, validation exécutée en fin de run.
+1. Sorties en `status: Generated` + bloc `ai:` complet — jamais un Asset qui se fait passer pour humain ;
+2. IDs au **premier numéro libre** du préfixe, jamais réutilisés ;
+3. nommage `<ID>-<slug>.<suffixe>.md` (EF-35) ;
+4. **aucune référence inventée** : ne lier que des IDs existants ;
+5. la validation est exécutée en fin de run et les erreurs corrigées ;
+6. les Processors `Report` ne créent ni ne modifient **aucun** fichier.
 
-Un même contrat peut avoir plusieurs implémentations (Copilot, Claude, script…) : c'est le critère de succès n° 9 du MVP — changer d'outil sans modifier les Assets.
+Ces invariants sont rappelés à l'IA par les instructions du repo (`.github/copilot-instructions.md` et `.github/instructions/*.instructions.md`, ciblées par suffixe de fichier).
+
+## Écrire votre propre Processor
+
+1. **Déclarez le contrat** dans `processors/mon-processor.yaml` (nom, version, inputs, outputs, activité).
+2. **Implémentez** : le plus simple est un prompt file — copiez un existant dans `.github/prompts/`, gardez sa structure (Entrées / Travail attendu / Sorties / Vérification finale).
+3. **Respectez les invariants** ci-dessus — la section « Sorties » de votre prompt doit les rappeler explicitement.
+4. Testez sur l'exemple, puis committez : le Processor est versionné comme tout le reste.
+
+## Remplacer un Processor (la promesse AI-agnostic)
+
+Le contrat est indépendant de l'implémentation : demain, `GenerateTestCases` peut être un prompt Claude, un script, un agent interne — tant qu'il consomme TestPlan + AC et produit des TestCases conformes, **les Assets ne changent pas**. C'est le critère de succès n° 9 du MVP, et la protection contre l'obsolescence des outils : *les méthodes changent, les outils changent, les IA changent — les Product Assets restent.*

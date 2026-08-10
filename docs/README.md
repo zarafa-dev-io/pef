@@ -26,8 +26,15 @@ PEF est un framework de Product Engineering augmenté par l'IA : la connaissance
 
 ## Par où commencer
 
-1. [Démarrer](getting-started.md) — instancier le template et valider son premier Asset ;
-2. [Concepts](concepts.md) — les cinq concepts et les principes ;
-3. [Tutoriel lot 1](tutorials/lot-1-chaine-de-test.md) — de la spécification aux tests ;
-4. [Tutoriel lot 2](tutorials/lot-2-backlog.md) — constituer et vivre le backlog ;
-5. [Référence](reference.md), [Validation](validation.md), [Processors](processors.md) — les pages de consultation.
+1. [Démarrer pas à pas](getting-started.md) — de zéro jusqu'à votre première génération IA, sans prérequis ;
+2. [Les concepts](concepts.md) — comprendre PEF en une lecture ; le [glossaire](glossaire.md) est là pour tout terme obscur ;
+3. Les tutoriels, dans l'ordre : [de la spec aux tests](tutorials/lot-1-chaine-de-test.md), [le backlog](tutorials/lot-2-backlog.md), [l'amont et les cérémonies](tutorials/lot-3-amont-et-ceremonies.md) ;
+4. En consultation au fil de l'eau : [le modèle d'Assets](reference.md), [le moteur de validation](validation.md), [les Processors](processors.md).
+
+## Lire cette documentation confortablement
+
+```bash
+npx serve docs     # depuis la racine du monorepo, puis http://localhost:3000
+```
+
+Le site s'affiche alors avec son menu de navigation à gauche et la recherche. (Ouvrir `index.html` en double-cliquant ne fonctionne pas : le navigateur bloque le chargement en `file://` — il faut servir le dossier en HTTP.)

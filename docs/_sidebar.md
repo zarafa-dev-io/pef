@@ -1,13 +1,17 @@
-- [Accueil](/)
-- [Démarrer](getting-started.md)
-- [Concepts](concepts.md)
-- [Référence du modèle](reference.md)
-- [Moteur de validation](validation.md)
-- [Processors](processors.md)
-- Tutoriels
-  - [Lot 1 — De la spec aux tests](tutorials/lot-1-chaine-de-test.md)
-  - [Lot 2 — Le backlog](tutorials/lot-2-backlog.md)
-  - [Lot 3 — Amont et cérémonies](tutorials/lot-3-amont-et-ceremonies.md)
-- Documents fondateurs
+- **Prise en main**
+  - [Accueil](/)
+  - [Démarrer pas à pas](getting-started.md)
+  - [Glossaire](glossaire.md)
+- **Comprendre**
+  - [Les concepts PEF](concepts.md)
+- **Tutoriels**
+  - [1. De la spec aux tests](tutorials/lot-1-chaine-de-test.md)
+  - [2. Le backlog](tutorials/lot-2-backlog.md)
+  - [3. Amont et cérémonies](tutorials/lot-3-amont-et-ceremonies.md)
+- **Référence**
+  - [Le modèle d'Assets](reference.md)
+  - [Le moteur de validation](validation.md)
+  - [Les Processors](processors.md)
+- **Documents fondateurs**
   - [Manifeste PEF](manifeste-pef.md)
   - [PRD du MVP](prd-pef-mvp.md)

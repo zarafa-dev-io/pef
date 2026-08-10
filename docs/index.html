@@ -7,19 +7,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   <meta name="description" content="PEF — le langage commun du Product Engineering augmenté par l'IA">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <style>
+    .sidebar-nav > ul > li > p { font-weight: 700; margin: 12px 0 4px 0; }
+    .sidebar { padding-top: 12px; }
+    .app-name-link { font-size: 1.4em; }
+  </style>
 </head>
 <body>
-  <div id="app"></div>
+  <div id="app">Chargement de la documentation…</div>
   <script>
     window.$docsify = {
       name: 'PEF',
-      repo: '',
       loadSidebar: true,
+      // Le même menu gauche sur toutes les pages, y compris les sous-répertoires
+      // (sans cet alias, Docsify cherche un _sidebar.md par répertoire et le menu
+      // disparaît sur les pages des tutoriels).
+      alias: { '/.*/_sidebar.md': '/_sidebar.md' },
+      // Profondeur des titres de page affichés dans le menu
       subMaxLevel: 2,
-      search: 'auto',
+      sidebarDisplayLevel: 1,
+      auto2top: true,
+      search: {
+        placeholder: 'Rechercher…',
+        noData: 'Aucun résultat',
+        depth: 3,
+      },
     };
   </script>
   <script src="https://cdn.jsdelivr.net/npm/docsify@4"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
 </body>
 </html>

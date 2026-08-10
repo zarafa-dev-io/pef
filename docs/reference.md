@@ -1,113 +1,153 @@
 # Référence du modèle PEF 0.1
 
-Source de vérité : `template/schemas/0.1/asset.schema.json`.
+La description complète du contrat des Assets. La source de vérité formelle est le JSON Schema : `schemas/0.1/asset.schema.json` — cette page l'explique en français.
 
-## Front matter obligatoire
+## Le front matter, champ par champ
 
-```yaml
----
-pefVersion: "0.1"
-assetType: Specification
-id: SPEC-042
-title: Gestion d'un client
-status: Draft
-version: 1.0.0
----
+Tout Asset commence par un bloc YAML entre deux lignes `---`. Six champs sont **obligatoires** :
+
+| Champ | Rôle | Valeurs autorisées | Erreur si absent/faux |
+|---|---|---|---|
+| `pefVersion` | Version du modèle PEF | `"0.1"` (avec les guillemets) | PEF002 |
+| `assetType` | Nature de l'Asset | un des 15 types (voir tableau suivant) | PEF002 |
+| `id` | Identifiant unique et définitif | `<PREFIXE>-<nnn>`, ex. `SPEC-042` | PEF002/003/005 |
+| `title` | Titre lisible | texte libre non vide | PEF002 |
+| `status` | Validité du contenu | `Draft`, `Review`, `Approved`, `Deprecated`, `Generated` | PEF002 |
+| `version` | Version sémantique du contenu | `X.Y.Z`, ex. `1.0.0` | PEF002 |
+
+Champs **optionnels** (selon le type) :
+
+| Champ | Pour qui | Rôle |
+|---|---|---|
+| `workItemType` | WorkItem (obligatoire) | `Epic`, `UserStory` ou `Bug` |
+| `workflowState` | WorkItem (obligatoire) | avancement du travail : `Drafting`, `Todo`, `InProgress`, `Validated` |
+| `priority` | WorkItem | `Must`, `Should`, `Could`, `Wont` (MoSCoW, DEC-004) |
+| `docType` | Documentation (obligatoire) | `Functional`, `Technical`, `Onboarding` |
+| `externalRef` | tous | lien libre vers l'outil d'exécution (URL, clé Jira) — non contrôlé |
+| `codeRefs` | Documentation | chemins de code source — non contrôlés |
+| `ai` | tous | bloc de provenance IA (voir plus bas) |
+
+Toute clé inconnue est **rejetée** (PEF002) : c'est ce qui attrape les fautes de frappe (`statut:`, `prioritie:`…).
+
+## AssetTypes, préfixes et suffixes
+
+| assetType | Préfixe ID | Suffixe fichier | Répertoire indicatif | En un mot |
+|---|---|---|---|---|
+| Vision | `VIS-` | `.vis.md` | `product/vision/` | Le pourquoi du produit |
+| Goal | `GOAL-` | `.goal.md` | `product/goals/` | Un objectif **mesurable** |
+| Roadmap | `RM-` | `.rm.md` | `product/roadmap/` | **Un Asset par élément** (thème × horizon, DEC-005) |
+| Persona | `PER-` | `.per.md` | `product/personas/` | Un profil d'utilisateur réel |
+| WorkItem (Epic) | `EPIC-` | `.epic.md` | `product/backlog/` | Un grand thème livrable |
+| WorkItem (UserStory) | `US-` | `.us.md` | `product/backlog/` | Un besoin, une itération |
+| WorkItem (Bug) | `BUG-` | `.bug.md` | `product/backlog/` | Un défaut **qualifié** |
+| Requirement | `REQ-` | `.req.md` | `product/requirements/` | Ce que le système doit faire |
+| BusinessRule | `BR-` | `.br.md` | `product/requirements/` | Une règle métier invariante |
+| NonFunctionalRequirement | `NFR-` | `.nfr.md` | `product/requirements/` | Performance, sécurité… |
+| Specification | `SPEC-` | `.spec.md` | `product/specifications/<SPEC>/` | Le comportement détaillé |
+| AcceptanceCriteria | `AC-` | `.ac.md` | répertoire de sa Specification | Un critère vérifiable |
+| TestPlan | `TP-` | `.tp.md` | `product/quality/<TP>/` | Périmètre + stratégie de recette |
+| TestCase | `TC-` | `.tc.md` | répertoire de son TestPlan | Un cas exécutable |
+| Decision | `DEC-` | `.dec.md` | `product/decisions/` | Un choix structurant, tracé |
+| Release | `REL-` | `.rel.md` | `product/releases/` | Une livraison, en langage métier |
+| Documentation | `DOC-` | `.doc.md` | `product/documentation/` | (lot 4) |
+
+**Nom de fichier** : `<ID>-<slug>.<suffixe>.md` — le slug en minuscules `a-z0-9-`.
+
+- ✅ `SPEC-042-gestion-client.spec.md`
+- ❌ `spec42.md` (pas d'ID, pas de suffixe), `SPEC-042-Gestion_Client.spec.md` (majuscules, underscore), `SPEC-042-gestion-client.md` (suffixe manquant)
+
+Le suffixe permet aux instructions IA de cibler un type où qu'il soit rangé (`applyTo: "**/*.spec.md"`) — l'arborescence, elle, n'est qu'indicative. Les IDs ne sont **jamais** renumérotés ni réutilisés, même après dépréciation (DEC-001) : on déprécie un Asset, on ne le supprime pas (le supprimer casserait les références entrantes).
+
+## Les relations : quand utiliser laquelle ?
+
+Vocabulaire **fermé** (toute autre clé est rejetée) ; chaque relation est une liste d'IDs.
+
+| Relation | Se lit « … » | Quand l'utiliser | Exemples types |
+|---|---|---|---|
+| `refines` | précise, détaille | l'Asset détaille un Asset plus général | `Goal refines Vision` · `US refines Epic` · `AC refines Specification` |
+| `satisfies` | répond à | l'Asset répond à une exigence ou un objectif | `Specification satisfies Requirement` · `RM satisfies Goal` · `Epic satisfies RM` |
+| `verifies` | vérifie | l'Asset apporte la preuve | `TestCase verifies AC` · `TestPlan verifies Specification` |
+| `dependsOn` | a besoin de | dépendance nécessaire | `Specification dependsOn BusinessRule` · `Bug dependsOn TestCase` (non-régression) · `Release dependsOn WorkItem` (contenu livré) |
+| `supersedes` | remplace | nouvelle version d'une Decision | `DEC-007 supersedes DEC-002` |
+| `impacts` | affecte | l'Asset met en cause d'autres Assets | `Bug impacts Specification` |
+| `documents` | documente | (lot 4) | `Documentation documents Specification` |
+
+Règles générales : on déclare la relation **sur l'Asset aval** (l'AC pointe vers sa Spec, pas l'inverse) ; toute cible doit exister (PEF006) ; pas d'auto-référence (PEF007).
+
+## Les statuts : le cycle de vie du contenu
+
+```
+            ┌────────────┐
+            ▼            │
+Draft ──► Review ──► Approved ──► Deprecated
+  ▲          │            │
+  └──────────┘            ▼
+                     (retour possible en Draft/Review :
+Generated ──► Review      le contenu repart en relecture)
+    │
+    └──► Draft
 ```
 
-## AssetTypes, préfixes et suffixes de fichiers
+- `Draft` — en cours d'écriture, tout est permis.
+- `Review` — soumis à relecture (c'est l'étape que PEF008 rend obligatoire).
+- `Approved` — validé : les autres Assets et l'équipe peuvent s'appuyer dessus.
+- `Deprecated` — retiré du jeu, conservé pour l'historique. **État terminal.**
+- `Generated` — produit par une IA, pas encore relu. Ne peut aller qu'en `Review`, `Draft` ou `Deprecated`.
 
-| assetType | Préfixe ID | Suffixe fichier | Répertoire indicatif |
-|---|---|---|---|
-| Vision | `VIS-` | `.vis.md` | `product/vision/` |
-| Goal | `GOAL-` | `.goal.md` | `product/goals/` |
-| Roadmap | `RM-` | `.rm.md` | `product/roadmap/` |
-| Persona | `PER-` | `.per.md` | `product/personas/` |
-| WorkItem (Epic) | `EPIC-` | `.epic.md` | `product/backlog/` |
-| WorkItem (UserStory) | `US-` | `.us.md` | `product/backlog/` |
-| WorkItem (Bug) | `BUG-` | `.bug.md` | `product/backlog/` |
-| Requirement | `REQ-` | `.req.md` | `product/requirements/` |
-| BusinessRule | `BR-` | `.br.md` | `product/requirements/` |
-| NonFunctionalRequirement | `NFR-` | `.nfr.md` | `product/requirements/` |
-| Specification | `SPEC-` | `.spec.md` | `product/specifications/<SPEC>/` |
-| AcceptanceCriteria | `AC-` | `.ac.md` | répertoire de la Specification parente |
-| TestPlan | `TP-` | `.tp.md` | `product/quality/<TP>/` |
-| TestCase | `TC-` | `.tc.md` | répertoire du TestPlan parent |
-| Decision | `DEC-` | `.dec.md` | `product/decisions/` |
-| Release | `REL-` | `.rel.md` | `product/releases/` |
-| Documentation | `DOC-` | `.doc.md` | `product/documentation/` |
+Transitions **interdites** (contrôlées par `pef validate --since <ref>`) : `Draft → Approved` (relecture sautée) et `Generated → Approved` (production IA approuvée sans revue) — les deux garanties Human in the Loop.
 
-Nom de fichier : `<ID>-<slug>.<suffixe>.md` (slug en minuscules `a-z0-9-`). IDs uniques, jamais renumérotés (DEC-001).
+## Le versioning sémantique (DEC-003)
 
-Conventions particulières : la Roadmap est **un Asset par élément** (thème × horizon, DEC-005) ; une Release `dependsOn` les WorkItems livrés.
-
-## Relations (vocabulaire fermé)
-
-| Relation | Sens | Exemple |
+| Niveau | Quand | Effet sur l'aval |
 |---|---|---|
-| `refines` | précise un Asset plus général | `Goal refines Vision`, `AC refines Specification` |
-| `satisfies` | répond à une exigence ou un objectif | `Specification satisfies Requirement` |
-| `verifies` | vérifie un Asset | `TestCase verifies AC`, `TestPlan verifies Specification` |
-| `dependsOn` | dépend de | `Specification dependsOn BusinessRule`, `Release dependsOn WorkItem`, `Bug dependsOn TestCase` (non-régression) |
-| `supersedes` | remplace | `DEC-005 supersedes DEC-002` |
-| `impacts` | affecte | `Bug impacts Specification` |
-| `documents` | documente | `Documentation documents Specification` |
+| **PATCH** `x.y.Z` | typo, reformulation, mise en page — le sens ne change pas | aucun |
+| **MINEUR** `x.Y.0` | ajout ou précision **compatible** (nouveau cas, détail) | revue facultative |
+| **MAJEUR** `X.0.0` | **le sens change** : comportement, règle, périmètre | les Assets aval doivent être revus |
 
-## Statuts et transitions
+Un bump majeur amont n'invalide **jamais** automatiquement l'aval : l'outillage détecte et signale, l'humain décide (`pef impact <ID>` liste ce qui est à examiner). En cas de doute entre mineur et majeur : choisissez majeur.
 
-`Draft → Review → Approved → Deprecated`, plus `Generated` pour une production IA non revue.
+## Cycle de vie des WorkItems : deux axes indépendants
 
-- Un retour en `Draft`/`Review` est toujours possible (le contenu repart en revue).
-- Interdits : `Draft → Approved` (revue sautée), `Generated → Approved` (revue humaine obligatoire, EF-18), toute sortie de `Deprecated`.
-- Contrôle en CI ou local : `npm run pef -- validate --since <ref-git>`.
+| Axe | Champ | Valeurs | Question |
+|---|---|---|---|
+| Contenu | `status` | Draft → Review → Approved | « Ce qui est écrit est-il juste ? » |
+| Réalisation | `workflowState` | Drafting → Todo → InProgress → Validated | « Où en est le travail ? » |
 
-## Cycle de vie des WorkItems (lot 2)
+Gardes (contrôlées avec `--since`) :
 
-Un WorkItem porte **deux axes indépendants** :
+- **→ `Todo`** : le contenu doit être `Approved` — on n'exécute pas un contenu non validé (PEF010) ;
+- **→ `Validated`** : les AcceptanceCriteria de la chaîne aval doivent être `Approved` (PEF011) ;
+- transitions **adjacentes uniquement**, dans les deux sens (PEF009) : pas de saut `Drafting → Validated`.
 
-- `status` — validité du **contenu** (axe commun à tous les Assets) ;
-- `workflowState` — état de **réalisation** : `Drafting → Todo → InProgress → Validated` (transitions adjacentes, dans les deux sens).
+Exemple d'indépendance : une US `Validated` dont la Spec évolue (bump majeur) repasse en revue de **contenu** (`status`) — son `workflowState` ne bouge pas, le travail a bien été fait.
 
-Gardes contrôlées par `pef validate --since <ref>` (EF-30) :
+## La provenance IA (bloc `ai:`)
 
-- passage à `Todo` : le contenu doit être `Approved` — on n'exécute pas un contenu non validé (PEF010) ;
-- passage à `Validated` : les AcceptanceCriteria de la chaîne aval doivent être `Approved` (PEF011) ;
-- un WorkItem `Validated` dont un Asset amont évolue repasse en revue de *contenu*, pas en `Todo`.
+Obligatoire dès qu'un Processor non humain produit ou modifie l'Asset (le statut `Generated` l'exige à la création) :
 
-Priorité (DEC-004) : champ optionnel `priority: Must | Should | Could | Wont` sur les WorkItems ; l'ordonnancement fin reste à l'outil d'exécution (`externalRef`).
+```yaml
+ai:
+  generated: true
+  processor: GenerateTestPlan     # quel Processor
+  processorVersion: "1.0"         # dans quelle version
+  reviewed: false                 # relu par un humain ?
+```
 
-## Provenance IA
-
-Obligatoire dès qu'un Processor non humain produit ou modifie l'Asset (statut `Generated` exigé à la création) :
+Après revue et approbation :
 
 ```yaml
 ai:
   generated: true
   processor: GenerateTestPlan
   processorVersion: "1.0"
-  reviewed: false        # puis true + reviewedBy/reviewedAt après revue
+  reviewed: true
+  reviewedBy: ROLE-PO             # qui a validé
+  reviewedAt: "2026-08-10"        # quand
 ```
 
-## Règles de validation
+C'est la réponse outillée à la question de gouvernance : *qui a généré quoi, qui a validé quoi ?*
 
-| Règle | Contrôle |
-|---|---|
-| PEF001 | Front matter YAML présent et lisible |
-| PEF002 | Conformité au JSON Schema (types, statuts, semver, clés autorisées) |
-| PEF003 | Préfixe de l'ID cohérent avec l'assetType / workItemType |
-| PEF004 | Nom de fichier conforme à `<ID>-<slug>.<suffixe>.md` (EF-35) |
-| PEF005 | Unicité des IDs dans le repo |
-| PEF006 | Toute référence résout vers un Asset existant |
-| PEF007 | Pas d'auto-référence |
-| PEF008 | Transitions de statut autorisées (avec `--since <ref>`) |
-| PEF009 | Transitions de `workflowState` adjacentes (avec `--since <ref>`) |
-| PEF010 | Passage à `Todo` : statut `Approved` exigé |
-| PEF011 | Passage à `Validated` : AC de la chaîne aval `Approved` exigées |
+## Contrôles : où chercher le détail
 
-## Couverture
-
-Lot 1 : `requirement-without-spec`, `requirement-without-ac`, `spec-without-ac`, `ac-without-testcase`, `orphan-asset` (hors Decisions), `broken-ref`.
-
-Lot 2 : `epic-without-userstory`, `userstory-without-ac`, `bug-without-regression-test`, `workitem-validated-without-testcase`, `workitem-inprogress-upstream-draft`.
-
-Lot 3 : `goal-without-workitem`, `roadmap-without-goal`.
+- Les **11 règles bloquantes** (PEF001 → PEF011) et les **13 catégories de couverture** sont expliquées une à une, avec exemples d'erreurs et corrections, dans [le moteur de validation](validation.md).
+- Les contrats et le circuit des Processors sont dans [les Processors](processors.md).
