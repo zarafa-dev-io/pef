@@ -4,7 +4,7 @@ assetType: PRD
 id: PRD-001
 title: PEF MVP — PEF-PO complet, de la vision aux tests fonctionnels
 status: Draft
-version: 0.10.0
+version: 0.11.0
 refines: [MANIFESTO-001]
 ai:
   generated: true
@@ -215,8 +215,8 @@ Le MVP est réussi si un utilisateur (persona PO pionnier) peut, sur un projet p
 
 ## 11. Questions ouvertes
 
-- **QO-1** — Licence et ouverture : open source dès le MVP, ou incubation interne SG puis ouverture ? (Impacte nommage, gouvernance, hébergement.)
-- **QO-2** — Versioning sémantique des Assets : que signifie un changement *majeur* d'un Requirement, et doit-il invalider automatiquement les statuts des Assets aval ?
+- **QO-1** — ~~Licence et ouverture~~ **Tranchée (v0.11.0)** : incubation privée (`zarafa-dev-io/pef`) jusqu'à la démonstration des critères de succès (§10) sur le pilote. La licence, le nom définitif et la gouvernance seront choisis au moment de l'ouverture, sur un modèle stabilisé par l'usage. À réévaluer après le pilote.
+- **QO-2** — ~~Versioning sémantique des Assets~~ **Tranchée (v0.11.0, DEC-003)** : MAJEUR = le sens change et l'aval doit être revu ; MINEUR = ajout ou précision compatible ; PATCH = forme. Un bump majeur amont n'invalide **jamais** automatiquement les statuts aval : l'outillage détecte et signale (EF-33), l'humain décide — le CLI ne réécrit aucun Asset. La détection outillée (mémorisation de la version amont revue) est prévue à partir du lot 2 ; d'ici là, `pef impact <ID>` couvre le besoin manuellement.
 - **QO-3** — ~~Projet pilote~~ **Tranchée (v0.5.0)** : pilote principal = l'IDE VS Code en TypeScript ; contre-pilote mainframe COBOL au lot 4 (voir §4, « Projet pilote »). À formaliser dans une Decision (`DEC-`).
 - **QO-4** — Les `AcceptanceCriteria` en Gherkin obligatoire, ou format libre avec Gherkin recommandé ?
 - **QO-5** — Nommage définitif des préfixes d'IDs et des suffixes de fichiers (EF-35), et politique de renumérotation interdite : à figer dans une Decision avant le premier pilote.
