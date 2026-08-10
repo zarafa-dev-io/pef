@@ -1,0 +1,16 @@
+# PEF Processor contract (EF-16, EF-27).
+processor: ReconstructFunctionalDoc
+version: "1.0"
+description: >-
+  Rédige une Documentation fonctionnelle en langage métier depuis la
+  Documentation technique et les BusinessRules extraites du code.
+inputs:
+  - Documentation   # docType: Technical
+  - BusinessRule
+outputs:
+  - Documentation   # docType: Functional
+activities:
+  - Documenter et embarquer
+implementation:
+  type: copilot-prompt
+  path: .github/prompts/reconstruct-functional-doc.prompt.md

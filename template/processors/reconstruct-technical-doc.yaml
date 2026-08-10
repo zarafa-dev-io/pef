@@ -1,0 +1,16 @@
+# PEF Processor contract (EF-16, EF-27). Agnostique au langage : stacks
+# modernes (TypeScript, Go, Python…) comme legacy (COBOL/JCL/CICS/DB2).
+processor: ReconstructTechnicalDoc
+version: "1.0"
+description: >-
+  Reconstruit une Documentation technique depuis un code source existant :
+  composants, points d'entrée, flux de données, dépendances, références code.
+userInputs:
+  - Le répertoire du code cible, ouvert dans le workspace VS Code (DEC-006)
+outputs:
+  - Documentation   # docType: Technical
+activities:
+  - Documenter et embarquer
+implementation:
+  type: copilot-prompt
+  path: .github/prompts/reconstruct-technical-doc.prompt.md

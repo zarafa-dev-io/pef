@@ -1,0 +1,18 @@
+# PEF Processor contract (EF-16, EF-31 étape 2). Déclenché par l'humain sur
+# son poste, jamais par la CI (qui se contente de signaler — étape 1).
+processor: EnrichDocumentation
+version: "1.0"
+description: >-
+  Met à jour les Documentations couvrant les Assets liés à un WorkItem
+  validé : sections concernées réécrites, coveredVersions rafraîchies,
+  proposition en statut Generated via PR — jamais de merge automatique.
+inputs:
+  - WorkItem
+  - Documentation
+outputs:
+  - Documentation
+activities:
+  - Documenter et embarquer
+implementation:
+  type: copilot-prompt
+  path: .github/prompts/enrich-documentation.prompt.md

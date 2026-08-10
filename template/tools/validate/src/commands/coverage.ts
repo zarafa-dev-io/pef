@@ -14,7 +14,8 @@ const typeOf = (graph: AssetGraph, id: string): string | undefined =>
 /**
  * Coverage rules — lot 1 (EF-12): REQ/SPEC/AC chain, orphans, broken refs ;
  * lot 2 (EF-12, EF-32): Epic/UserStory/Bug chain and workflowState consistency ;
- * lot 3 (EF-9, EF-12): upstream chain Goal/Roadmap.
+ * lot 3 (EF-9, EF-12): upstream chain Goal/Roadmap ;
+ * lot 4 (EF-12, EF-28): Documentation coverage and staleness.
  */
 export function runCoverage(assets: ParsedAsset[], graph: AssetGraph): Gap[] {
   const gaps: Gap[] = [];
@@ -50,6 +51,32 @@ export function runCoverage(assets: ParsedAsset[], graph: AssetGraph): Gap[] {
     if (assetType === 'Specification' && acsRefining(id).length === 0) {
       gaps.push({ category: 'spec-without-ac', assetId: id, file: asset.rel,
         message: `Specification ${id} has no AcceptanceCriteria refining it` });
+    }
+
+    if (assetType === 'Specification' && status === 'Approved') {
+      const docs = (graph.inbound.get(id) ?? [])
+        .filter((r) => r.key === 'documents' && typeOf(graph, r.source) === 'Documentation');
+      if (docs.length === 0) {
+        gaps.push({ category: 'spec-approved-without-doc', assetId: id, file: asset.rel,
+          message: `Approved Specification ${id} is covered by no Documentation` });
+      }
+    }
+
+    if (assetType === 'Documentation') {
+      const documented = outboundRefs(asset).filter((r) => r.key === 'documents');
+      if (documented.length === 0) {
+        gaps.push({ category: 'doc-without-documents', assetId: id, file: asset.rel,
+          message: `Documentation ${id} references no asset ("documents" is empty)` });
+      }
+      if (status === 'Approved' && asset.fm.coveredVersions) {
+        for (const [coveredId, recordedVersion] of Object.entries(asset.fm.coveredVersions)) {
+          const currentVersion = graph.byId.get(coveredId)?.[0]?.fm?.version;
+          if (typeof currentVersion === 'string' && currentVersion !== recordedVersion) {
+            gaps.push({ category: 'stale-doc', assetId: id, file: asset.rel,
+              message: `Documentation ${id} was approved against ${coveredId} v${recordedVersion}, now v${currentVersion} — refresh needed` });
+          }
+        }
+      }
     }
 
     if (assetType === 'Goal') {

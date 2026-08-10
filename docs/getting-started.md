@@ -149,7 +149,7 @@ Puis committez : `git add -A && git commit -m "REQ-002 : recherche client"`.
 ## 7. Votre première génération IA
 
 1. Dans VS Code, ouvrez le chat Copilot (icône chat, ou `Ctrl+Alt+I`).
-2. Tapez `/` : la liste des prompts du dépôt apparaît (ils viennent de `.github/prompts/`).
+2. Tapez `/` : la liste des prompts du dépôt apparaît (ils viennent de `.github/prompts/` — la liste complète des 19 Processors est dans [la page Processors](processors.md)).
 3. Choisissez `/generate-acceptance-criteria` et indiquez `SPEC-001`.
 4. Le Processor lit la spec, ses règles métier et NFR **directement dans le repo**, puis propose des fichiers AC.
 

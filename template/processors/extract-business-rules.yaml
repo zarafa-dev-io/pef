@@ -1,0 +1,17 @@
+# PEF Processor contract (EF-16, EF-27).
+processor: ExtractBusinessRules
+version: "1.0"
+description: >-
+  Extrait les règles métier d'un code source existant : chaque BusinessRule
+  en statut Generated, avec sa référence de code (codeRefs) et son niveau de
+  certitude (observed = lue telle quelle dans le code ; inferred = déduite,
+  validation métier explicitement requise).
+userInputs:
+  - Le répertoire du code cible, ouvert dans le workspace VS Code (DEC-006)
+outputs:
+  - BusinessRule
+activities:
+  - Documenter et embarquer
+implementation:
+  type: copilot-prompt
+  path: .github/prompts/extract-business-rules.prompt.md

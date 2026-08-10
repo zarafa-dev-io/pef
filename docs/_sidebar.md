@@ -8,6 +8,7 @@
   - [1. De la spec aux tests](tutorials/lot-1-chaine-de-test.md)
   - [2. Le backlog](tutorials/lot-2-backlog.md)
   - [3. Amont et cérémonies](tutorials/lot-3-amont-et-ceremonies.md)
+  - [4. Documentation vivante](tutorials/lot-4-documentation.md)
 - **Référence**
   - [Le modèle d'Assets](reference.md)
   - [Le moteur de validation](validation.md)

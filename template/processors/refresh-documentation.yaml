@@ -1,0 +1,18 @@
+# PEF Processor contract (EF-16, EF-28). Sortie = rapport : le rafraîchissement
+# effectif passe par EnrichDocumentation, sous contrôle humain.
+processor: RefreshDocumentation
+version: "1.0"
+description: >-
+  Compare une Documentation aux Assets qu'elle documente (et aux codeRefs si
+  le code est ouvert dans le workspace) et produit un rapport d'écarts :
+  sections périmées, Assets modifiés depuis la dernière approbation,
+  règles disparues du code.
+inputs:
+  - Documentation
+outputs:
+  - Report
+activities:
+  - Documenter et embarquer
+implementation:
+  type: copilot-prompt
+  path: .github/prompts/refresh-documentation.prompt.md

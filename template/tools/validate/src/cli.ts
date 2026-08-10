@@ -84,7 +84,7 @@ switch (command) {
   case 'signal': {
     const { issues, assets, graph } = runValidate(root);
     const gaps = runCoverage(assets, graph);
-    const actions = computeActions(assets, issues, gaps);
+    const actions = computeActions(assets, issues, gaps, graph);
     if (!opts.apply) {
       console.log(`Dry-run: ${actions.length} issue(s) would be synchronised (use --apply to run gh):\n`);
       for (const action of actions) console.log(`  ${action.title}`);

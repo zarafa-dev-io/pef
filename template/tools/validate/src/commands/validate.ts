@@ -120,6 +120,30 @@ export function runValidate(root: string, opts: { since?: string } = {}): Valida
       }
     }
 
+    // PEF012 — an Approved Documentation must record the version of every
+    // documented asset at approval time (EF-28: staleness detection basis)
+    if (fm.assetType === 'Documentation' && fm.status === 'Approved') {
+      const documented = Array.isArray(fm.documents) ? fm.documents : [];
+      const covered = fm.coveredVersions;
+      if (!covered || typeof covered !== 'object') {
+        push(asset, findLine(asset.raw, 'status:'), 'PEF012',
+          'Approved Documentation must carry "coveredVersions" (version of each documented asset at approval time)');
+      } else {
+        for (const d of documented) {
+          if (!(d in covered)) {
+            push(asset, findLine(asset.raw, 'coveredVersions'), 'PEF012',
+              `coveredVersions is missing an entry for documented asset "${d}"`);
+          }
+        }
+        for (const key of Object.keys(covered)) {
+          if (!documented.includes(key)) {
+            push(asset, findLine(asset.raw, key), 'PEF012',
+              `coveredVersions records "${key}" which is not in the "documents" list`);
+          }
+        }
+      }
+    }
+
     // Transition controls (EF-4, EF-30), only with --since <git ref>
     if (opts.since && id) {
       const old = oldFrontMatterAt(opts.since, asset.file, root);

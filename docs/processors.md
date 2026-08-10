@@ -37,7 +37,7 @@ Deux familles de sorties :
 - **des Assets** — toujours créés en `status: Generated` avec leur provenance ;
 - **`Report`** — un rapport en chat, *aucun fichier créé* : pour les analyses où la décision doit rester humaine (refinement, cérémonies).
 
-## Les 13 Processors livrés
+## Les 19 Processors livrés
 
 ### Chaîne de test (lot 1)
 
@@ -66,6 +66,19 @@ Deux familles de sorties :
 | `/prepare-sprint-planning` | WorkItems + Goals → **Report** | Candidats prêts triés, dépendances, risques, agenda — jamais de capacité/vélocité |
 | `/prepare-sprint-review` | WorkItems + AC + Roadmap → **Report** | Livré vs prévu, scénarios de démo tirés des AC, impact roadmap |
 | `/draft-release-notes` | WorkItems `Validated` + AC → Release | Langage métier ; seuls les WorkItems validés entrent |
+
+### Documentation et rétro-documentation (lot 4)
+
+| Prompt | Entrées → Sorties | Ce qu'il fait |
+|---|---|---|
+| `/reconstruct-technical-doc` | code (workspace) → Documentation Technical | Composants, points d'entrée, flux, dépendances — chaque affirmation référencée (`codeRefs`) ; incohérences signalées, jamais lissées |
+| `/extract-business-rules` | code (workspace) → BusinessRules | Une règle par Asset, avec `certainty: observed` (lue dans le code) ou `inferred` (déduite — validation métier requise) |
+| `/reconstruct-functional-doc` | Doc technique + BR → Documentation Functional | Le « quoi » métier depuis le « comment » technique ; l'`inferred` est marqué « sous réserve » |
+| `/refresh-documentation` | Documentation → **Report** | Écarts : Assets modifiés depuis l'approbation, sections périmées, règles disparues du code |
+| `/enrich-documentation` | WorkItem validé + Docs périmées → Documentation | L'étape 2 d'EF-31 : réécrit les sections touchées, rafraîchit `coveredVersions` — déclenchée par l'humain, jamais par la CI |
+| `/draft-onboarding-guide` | le graphe d'Assets → Documentation Onboarding | Parcours de lecture ordonné et commenté, par profil métier/technique |
+
+Prérequis rétro-doc (DEC-006) : le code est ouvert dans le **même workspace VS Code** que le repo PEF ; les `codeRefs` sont préfixés du nom du dossier repo (`clientis-app/src/clients/rules.ts:18-42`).
 
 ## Le circuit complet d'une génération
 

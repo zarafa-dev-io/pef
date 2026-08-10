@@ -27,3 +27,27 @@ jobs:
       - name: pef coverage (report only)
         working-directory: template/tools/validate
         run: npm run pef -- coverage
+
+  # EF-31 step 1 / EF-33 relay: deterministic detection -> GitHub issues.
+  # AI execution (EnrichDocumentation & co) always stays on the workstation.
+  signal:
+    if: github.event_name == 'push'
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: template/tools/validate/package-lock.json
+      - name: Install validation engine
+        working-directory: template/tools/validate
+        run: npm ci
+      - name: pef signal (sync issues)
+        working-directory: template/tools/validate
+        run: npm run pef -- signal --apply

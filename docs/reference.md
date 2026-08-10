@@ -23,8 +23,10 @@ Champs **optionnels** (selon le type) :
 | `workflowState` | WorkItem (obligatoire) | avancement du travail : `Drafting`, `Todo`, `InProgress`, `Validated` |
 | `priority` | WorkItem | `Must`, `Should`, `Could`, `Wont` (MoSCoW, DEC-004) |
 | `docType` | Documentation (obligatoire) | `Functional`, `Technical`, `Onboarding` |
+| `coveredVersions` | Documentation | la version de chaque Asset documenté au moment de l'approbation — **obligatoire en `Approved`** (PEF012), base de la détection de péremption `stale-doc` |
+| `certainty` | BusinessRule | pour une règle extraite du code : `observed` (lue telle quelle) ou `inferred` (déduite — validation métier requise avant `Approved`) |
 | `externalRef` | tous | lien libre vers l'outil d'exécution (URL, clé Jira) — non contrôlé |
-| `codeRefs` | Documentation | chemins de code source — non contrôlés |
+| `codeRefs` | Documentation, BusinessRule | chemins de code au format `<repo>/<chemin>[:<lignes>]` (DEC-006) — non contrôlés |
 | `ai` | tous | bloc de provenance IA (voir plus bas) |
 
 Toute clé inconnue est **rejetée** (PEF002) : c'est ce qui attrape les fautes de frappe (`statut:`, `prioritie:`…).
@@ -49,7 +51,7 @@ Toute clé inconnue est **rejetée** (PEF002) : c'est ce qui attrape les fautes 
 | TestCase | `TC-` | `.tc.md` | répertoire de son TestPlan | Un cas exécutable |
 | Decision | `DEC-` | `.dec.md` | `product/decisions/` | Un choix structurant, tracé |
 | Release | `REL-` | `.rel.md` | `product/releases/` | Une livraison, en langage métier |
-| Documentation | `DOC-` | `.doc.md` | `product/documentation/` | (lot 4) |
+| Documentation | `DOC-` | `.doc.md` | `product/documentation/` | Fonctionnelle, technique ou onboarding ; `documents` ses Assets |
 
 **Nom de fichier** : `<ID>-<slug>.<suffixe>.md` — le slug en minuscules `a-z0-9-`.
 
@@ -70,7 +72,7 @@ Vocabulaire **fermé** (toute autre clé est rejetée) ; chaque relation est une
 | `dependsOn` | a besoin de | dépendance nécessaire | `Specification dependsOn BusinessRule` · `Bug dependsOn TestCase` (non-régression) · `Release dependsOn WorkItem` (contenu livré) |
 | `supersedes` | remplace | nouvelle version d'une Decision | `DEC-007 supersedes DEC-002` |
 | `impacts` | affecte | l'Asset met en cause d'autres Assets | `Bug impacts Specification` |
-| `documents` | documente | (lot 4) | `Documentation documents Specification` |
+| `documents` | documente | une Documentation déclare les Assets qu'elle couvre | `Documentation documents Specification` · `Documentation documents BusinessRule` |
 
 Règles générales : on déclare la relation **sur l'Asset aval** (l'AC pointe vers sa Spec, pas l'inverse) ; toute cible doit exister (PEF006) ; pas d'auto-référence (PEF007).
 
@@ -146,6 +148,14 @@ ai:
 ```
 
 C'est la réponse outillée à la question de gouvernance : *qui a généré quoi, qui a validé quoi ?*
+
+## La péremption documentaire (lot 4)
+
+Le mécanisme tient en trois pièces :
+
+1. **`coveredVersions`** — à l'approbation d'une Documentation, on fige la version de chaque Asset couvert (PEF012 l'exige) ;
+2. **`stale-doc`** — dès qu'un Asset couvert change de version, la couverture signale l'écart : `approved against SPEC-001 v1.0.0, now v2.0.0` ;
+3. **`doc-enrichment`** — quand un WorkItem passe `Validated` et que sa chaîne est couverte par une Documentation périmée, `pef signal` ouvre une issue : l'humain déroule alors `/enrich-documentation` sur son poste (jamais la CI — elle détecte, elle n'exécute pas d'IA).
 
 ## Contrôles : où chercher le détail
 

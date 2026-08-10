@@ -48,6 +48,12 @@ Se lit : *fichier* `:` *ligne* — *règle* — *explication*. Code de sortie : 
 | PEF006 | Toute référence résout | `unresolved reference "refines: SPEC-999"` | faute de frappe dans l'ID, ou la cible n'existe pas encore |
 | PEF007 | Pas d'auto-référence | `asset references itself via "refines"` | retirez l'ID de sa propre liste |
 
+### Documentation
+
+| Règle | Contrôle | Exemple d'erreur | Correction |
+|---|---|---|---|
+| PEF012 | Documentation `Approved` ⇒ `coveredVersions` complet | `coveredVersions is missing an entry for documented asset "SPEC-001"` | à l'approbation, enregistrez la version courante de chaque Asset listé dans `documents` |
+
 ### Transitions (nécessitent `--since <ref-git>`)
 
 Ces règles comparent le front matter actuel à celui d'un état git antérieur — typiquement `--since origin/main` dans une PR, ou `--since HEAD` avant de committer.
@@ -78,6 +84,9 @@ La couverture ne bloque pas (sauf `--strict`) : elle rend visibles les **dettes*
 | `workitem-inprogress-upstream-draft` | Le sol bouge sous un travail en cours | statuer sur l'amont repassé en Draft avant de continuer |
 | `goal-without-workitem` | Un objectif que personne ne sert : vœu pieux | `/draft-roadmap` puis `/draft-epics` |
 | `roadmap-without-goal` | Un élément de roadmap sans objectif : pourquoi le faire ? | relier au Goal, ou questionner l'élément |
+| `spec-approved-without-doc` | Une spec approuvée que la documentation ignore | la couvrir par une Documentation (`documents`) |
+| `doc-without-documents` | Une Documentation qui ne couvre rien : invérifiable | déclarer les Assets couverts dans `documents` |
+| `stale-doc` | Un Asset couvert a changé depuis l'approbation de la doc | `/refresh-documentation` (rapport) puis `/enrich-documentation` |
 | `orphan-asset` | Un Asset relié à rien : personne ne le trouvera | ajouter la relation qui le situe (les Decisions sont exemptées) |
 | `broken-ref` | Référence cassée (vue couverture de PEF006) | corriger l'ID cible |
 
@@ -106,9 +115,19 @@ npm run pef -- signal            # simulation : liste ce qui serait fait
 npm run pef -- signal --apply    # exécute via le CLI gh
 ```
 
-Pour chaque action humaine requise, une **issue GitHub** est créée : un Asset en `Review`/`Generated` → issue `review-required` ; un trou de couverture → `coverage-gap` ; une référence cassée → `broken-ref`. Règles : une seule issue ouverte par (Asset, type d'action), jamais dupliquée ; **fermeture automatique** quand le contrôle constate que l'écart a disparu ; chaque issue cite la commande de vérification.
+Pour chaque action humaine requise, une **issue GitHub** est créée :
 
-Prérequis : le CLI `gh` authentifié (`gh auth login`) et un remote GitHub.
+| Type d'issue | Déclencheur |
+|---|---|
+| `review-required` | un Asset en `Review` ou `Generated` attend une relecture |
+| `coverage-gap` | un trou de couverture (exigence sans test, epic sans US…) |
+| `broken-ref` | une référence cassée |
+| `rules-to-validate` | une BusinessRule `inferred` (extraite du code) attend sa validation métier |
+| `doc-enrichment` | un WorkItem `Validated` dont la chaîne est couverte par une Documentation périmée — à traiter localement avec `/enrich-documentation` |
+
+Règles : une seule issue ouverte par (Asset, type d'action), jamais dupliquée ; **fermeture automatique** quand le contrôle constate que l'écart a disparu ; chaque issue cite la commande de vérification.
+
+Prérequis en local : le CLI `gh` authentifié (`gh auth login`) et un remote GitHub. En CI, le job `signal` du workflow fait le même travail sur chaque push `main` (détection seulement — jamais d'exécution IA).
 
 ## La CI : un renfort, pas une dépendance
 

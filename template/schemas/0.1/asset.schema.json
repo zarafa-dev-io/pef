@@ -25,6 +25,15 @@
     "priority": { "enum": ["Must", "Should", "Could", "Wont"] },
     "docType": { "enum": ["Functional", "Technical", "Onboarding"] },
     "workflowState": { "enum": ["Drafting", "Todo", "InProgress", "Validated"] },
+    "certainty": { "enum": ["observed", "inferred"] },
+    "coveredVersions": {
+      "type": "object",
+      "propertyNames": { "pattern": "^(VIS|GOAL|RM|PER|EPIC|US|BUG|REQ|BR|NFR|SPEC|AC|TP|TC|DEC|REL|DOC)-\\d{3,}$" },
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$"
+      }
+    },
     "externalRef": { "type": "string" },
     "codeRefs": { "type": "array", "items": { "type": "string" } },
     "ai": {
@@ -65,6 +74,14 @@
       "if": { "properties": { "assetType": { "const": "Documentation" } }, "required": ["assetType"] },
       "then": { "required": ["docType"] },
       "else": { "not": { "required": ["docType"] } }
+    },
+    {
+      "if": { "properties": { "assetType": { "const": "BusinessRule" } }, "required": ["assetType"] },
+      "else": { "not": { "required": ["certainty"] } }
+    },
+    {
+      "if": { "properties": { "assetType": { "const": "Documentation" } }, "required": ["assetType"] },
+      "else": { "not": { "required": ["coveredVersions"] } }
     },
     {
       "if": { "properties": { "status": { "const": "Generated" } }, "required": ["status"] },

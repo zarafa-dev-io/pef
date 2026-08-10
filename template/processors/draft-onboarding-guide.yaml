@@ -1,0 +1,19 @@
+# PEF Processor contract (EF-16, EF-29).
+processor: DraftOnboardingGuide
+version: "1.0"
+description: >-
+  Produit une Documentation Onboarding depuis le graphe d'Assets : un parcours
+  de lecture ordonné et commenté pour un nouvel arrivant, par profil
+  (métier / technique).
+inputs:
+  - Vision
+  - Persona
+  - Documentation
+  - Decision
+outputs:
+  - Documentation   # docType: Onboarding
+activities:
+  - Documenter et embarquer
+implementation:
+  type: copilot-prompt
+  path: .github/prompts/draft-onboarding-guide.prompt.md

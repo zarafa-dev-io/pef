@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import type { ParsedAsset } from '../lib/assets.js';
+import { downstreamIds, upstreamIds, type AssetGraph } from '../lib/graph.js';
 import type { Issue } from './validate.js';
 import type { Gap } from './coverage.js';
 
@@ -14,12 +15,20 @@ export interface SignalAction {
 const TITLE_PREFIX = '[PEF]';
 
 /**
- * EF-33 (lot 1 subset): turn validate/coverage reports into actionable GitHub
- * issues — one open issue per (asset, action type), deduplicated by title,
- * auto-closed when the deterministic check no longer reports the gap.
- * Local-first: runs `gh` from the workstation; CI is an optional relay.
+ * EF-33: turn validate/coverage reports into actionable GitHub issues — one
+ * open issue per (asset, action type), deduplicated by title, auto-closed when
+ * the deterministic check no longer reports the gap. Action types: lot 1
+ * review-required / coverage-gap / broken-ref ; lot 4 rules-to-validate (EF-27)
+ * and doc-enrichment (EF-31, two-step trigger: deterministic detection here,
+ * AI execution on the workstation). Local-first: runs `gh` from the
+ * workstation; CI is an optional relay.
  */
-export function computeActions(assets: ParsedAsset[], issues: Issue[], gaps: Gap[]): SignalAction[] {
+export function computeActions(
+  assets: ParsedAsset[],
+  issues: Issue[],
+  gaps: Gap[],
+  graph?: AssetGraph,
+): SignalAction[] {
   const actions = new Map<string, SignalAction>();
   const add = (type: string, assetId: string, detail: string, check: string) => {
     const title = `${TITLE_PREFIX} ${type}: ${assetId}`;
@@ -45,12 +54,46 @@ export function computeActions(assets: ParsedAsset[], issues: Issue[], gaps: Gap
     }
   }
   for (const gap of gaps) {
-    add(gap.category === 'broken-ref' ? 'broken-ref' : 'coverage-gap', gap.assetId, gap.message,
-      'npm run pef -- coverage');
+    const type = gap.category === 'broken-ref' ? 'broken-ref'
+      : gap.category === 'stale-doc' ? 'stale-doc'
+      : 'coverage-gap';
+    add(type, gap.assetId, gap.message, 'npm run pef -- coverage');
   }
   for (const issue of issues.filter((i) => i.rule === 'PEF006')) {
     add('broken-ref', issue.file, issue.message, 'npm run pef -- validate');
   }
+
+  // EF-27 — inferred BusinessRules await explicit business validation
+  for (const asset of assets) {
+    if (asset.fm?.assetType === 'BusinessRule' && asset.fm.certainty === 'inferred' &&
+        asset.fm.status !== 'Approved' && asset.fm.status !== 'Deprecated') {
+      add('rules-to-validate', String(asset.fm.id),
+        `\`${asset.rel}\` was inferred from code (certainty: inferred) and awaits business validation`,
+        'npm run pef -- validate');
+    }
+  }
+
+  // EF-31 step 1 — a Validated WorkItem whose chain is covered by a now-stale
+  // Documentation triggers a doc-enrichment signal (execution stays human+local)
+  if (graph) {
+    const staleDocs = new Set(gaps.filter((g) => g.category === 'stale-doc').map((g) => g.assetId));
+    for (const asset of assets) {
+      if (asset.fm?.assetType !== 'WorkItem' || asset.fm.workflowState !== 'Validated') continue;
+      const id = String(asset.fm.id);
+      const chain = new Set([id, ...upstreamIds(graph, id), ...downstreamIds(graph, id)]);
+      const docsToEnrich = [...staleDocs].filter((docId) => {
+        const doc = graph.byId.get(docId)?.[0];
+        const documented = Array.isArray(doc?.fm?.documents) ? (doc.fm.documents as string[]) : [];
+        return documented.some((d) => chain.has(d));
+      });
+      if (docsToEnrich.length > 0) {
+        add('doc-enrichment', id,
+          `WorkItem ${id} is Validated and its chain is covered by stale Documentation: ${docsToEnrich.join(', ')} — run the EnrichDocumentation processor locally`,
+          'npm run pef -- coverage');
+      }
+    }
+  }
+
   return [...actions.values()];
 }
 

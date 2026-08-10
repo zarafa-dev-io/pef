@@ -67,6 +67,9 @@ export interface FrontMatter {
   docType?: string;
   workflowState?: string;
   priority?: string;
+  certainty?: string;
+  coveredVersions?: Record<string, string>;
+  documents?: string[];
   externalRef?: string;
   codeRefs?: string[];
   ai?: Record<string, unknown>;
