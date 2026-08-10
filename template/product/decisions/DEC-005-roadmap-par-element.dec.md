@@ -3,13 +3,15 @@ pefVersion: "0.1"
 assetType: Decision
 id: DEC-005
 title: La Roadmap est un Asset par élément, pas un document monolithique
-status: Review
+status: Approved
 version: 1.0.0
 impacts: [RM-001]
 ai:
   generated: true
   processor: Claude
-  reviewed: false
+  reviewed: true
+  reviewedBy: ROLE-PO
+  reviewedAt: "2026-08-10"
 ---
 
 # La Roadmap est un Asset par élément, pas un document monolithique
