@@ -3,12 +3,14 @@ pefVersion: "0.1"
 assetType: Decision
 id: DEC-006
 title: Accès au code par workspace multi-root et format des codeRefs
-status: Review
+status: Approved
 version: 1.0.0
 ai:
   generated: true
   processor: Claude
-  reviewed: false
+  reviewed: true
+  reviewedBy: ROLE-PO
+  reviewedAt: "2026-08-10"
 ---
 
 # Accès au code par workspace multi-root et format des codeRefs
