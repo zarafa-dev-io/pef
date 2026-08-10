@@ -1,0 +1,17 @@
+# PEF Processor contract (EF-16). Sortie = rapport (EF-22).
+processor: PrepareSprintReview
+version: "1.0"
+description: >-
+  Prépare une sprint review : livré vs prévu (workflowState), scénarios de
+  démonstration depuis les AC, impact roadmap, questions stakeholders.
+inputs:
+  - WorkItem
+  - AcceptanceCriteria
+  - Roadmap
+outputs:
+  - Report
+activities:
+  - Sprint Review
+implementation:
+  type: copilot-prompt
+  path: .github/prompts/prepare-sprint-review.prompt.md

@@ -1,0 +1,18 @@
+# PEF Processor contract (EF-16).
+processor: DraftVision
+version: "1.0"
+description: >-
+  Structure des notes libres (ateliers, entretiens, idées) en une Vision
+  produit et ses Goals mesurables.
+userInputs:
+  - Notes libres (texte, compte-rendu d'atelier, brief)
+inputs:
+  - Persona
+outputs:
+  - Vision
+  - Goal
+activities:
+  - Formuler la vision et les objectifs
+implementation:
+  type: copilot-prompt
+  path: .github/prompts/draft-vision.prompt.md

@@ -4,7 +4,7 @@ assetType: PRD
 id: PRD-001
 title: PEF MVP — PEF-PO complet, de la vision aux tests fonctionnels
 status: Draft
-version: 0.12.0
+version: 0.13.0
 refines: [MANIFESTO-001]
 ai:
   generated: true
@@ -221,7 +221,7 @@ Le MVP est réussi si un utilisateur (persona PO pionnier) peut, sur un projet p
 - **QO-4** — Les `AcceptanceCriteria` en Gherkin obligatoire, ou format libre avec Gherkin recommandé ?
 - **QO-5** — Nommage définitif des préfixes d'IDs et des suffixes de fichiers (EF-35), et politique de renumérotation interdite : à figer dans une Decision avant le premier pilote.
 - **QO-6** — ~~Priorisation~~ **Tranchée (v0.12.0, DEC-004)** : champ optionnel `priority: Must | Should | Could | Wont` sur les WorkItems, exploitable par les Processors ; l'ordonnancement fin (ordre total) reste à l'outil d'exécution via `externalRef`. Pas d'Asset `Backlog` dédié.
-- **QO-7** — La Roadmap : un Asset unique versionné, ou un Asset par élément de roadmap (traçabilité plus fine, maintenance plus lourde) ?
+- **QO-7** — ~~La Roadmap~~ **Tranchée (v0.13.0, DEC-005)** : un Asset `RM-` par élément de roadmap (thème × horizon, avec critère de sortie), chaque élément `satisfies` son Goal, les Epics `satisfies` l'élément précis. La vue d'ensemble est le répertoire `product/roadmap/`, pas un Asset agrégateur.
 - **QO-8** — Accès au code pour la rétro-doc : le code source vit hors du repo PEF — les Processors y accèdent comment (workspace multi-root VS Code, chemin configuré, extraits fournis) et les `codeRefs` survivent-ils aux refactorings ?
 - **QO-10** — À clarifier avec zDevOps : qu'est-il exécutable dans les GitHub Actions SG — script embarqué au repo, binaire externe, actions du marketplace ? La réponse conditionne l'activation du mode CI-renfort ; le mode local reste la base garantie.
 - **QO-9** — ~~Accès IA en CI~~ **Tranchée (v0.6.1)** : pas d'appel IA possible depuis la CI en contexte SG à ce stade — déclencheur en deux temps (EF-31) : signalement déterministe en CI, exécution locale du Processor. À réévaluer si la contrainte est levée.

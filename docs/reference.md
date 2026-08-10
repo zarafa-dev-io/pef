@@ -39,6 +39,8 @@ version: 1.0.0
 
 Nom de fichier : `<ID>-<slug>.<suffixe>.md` (slug en minuscules `a-z0-9-`). IDs uniques, jamais renumérotés (DEC-001).
 
+Conventions particulières : la Roadmap est **un Asset par élément** (thème × horizon, DEC-005) ; une Release `dependsOn` les WorkItems livrés.
+
 ## Relations (vocabulaire fermé)
 
 | Relation | Sens | Exemple |
@@ -46,7 +48,7 @@ Nom de fichier : `<ID>-<slug>.<suffixe>.md` (slug en minuscules `a-z0-9-`). IDs 
 | `refines` | précise un Asset plus général | `Goal refines Vision`, `AC refines Specification` |
 | `satisfies` | répond à une exigence ou un objectif | `Specification satisfies Requirement` |
 | `verifies` | vérifie un Asset | `TestCase verifies AC`, `TestPlan verifies Specification` |
-| `dependsOn` | dépend de | `Specification dependsOn BusinessRule` |
+| `dependsOn` | dépend de | `Specification dependsOn BusinessRule`, `Release dependsOn WorkItem`, `Bug dependsOn TestCase` (non-régression) |
 | `supersedes` | remplace | `DEC-005 supersedes DEC-002` |
 | `impacts` | affecte | `Bug impacts Specification` |
 | `documents` | documente | `Documentation documents Specification` |
@@ -107,3 +109,5 @@ ai:
 Lot 1 : `requirement-without-spec`, `requirement-without-ac`, `spec-without-ac`, `ac-without-testcase`, `orphan-asset` (hors Decisions), `broken-ref`.
 
 Lot 2 : `epic-without-userstory`, `userstory-without-ac`, `bug-without-regression-test`, `workitem-validated-without-testcase`, `workitem-inprogress-upstream-draft`.
+
+Lot 3 : `goal-without-workitem`, `roadmap-without-goal`.

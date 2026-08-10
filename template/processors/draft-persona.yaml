@@ -1,0 +1,17 @@
+# PEF Processor contract (EF-16).
+processor: DraftPersona
+version: "1.0"
+description: >-
+  Synthétise des notes d'entretiens ou d'observation en Personas :
+  profil, objectifs, frustrations, critère d'adoption.
+userInputs:
+  - Notes d'entretiens, verbatims, observations terrain
+inputs:
+  - Vision
+outputs:
+  - Persona
+activities:
+  - Décrire les utilisateurs
+implementation:
+  type: copilot-prompt
+  path: .github/prompts/draft-persona.prompt.md

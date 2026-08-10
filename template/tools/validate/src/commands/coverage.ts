@@ -13,7 +13,8 @@ const typeOf = (graph: AssetGraph, id: string): string | undefined =>
 
 /**
  * Coverage rules — lot 1 (EF-12): REQ/SPEC/AC chain, orphans, broken refs ;
- * lot 2 (EF-12, EF-32): Epic/UserStory/Bug chain and workflowState consistency.
+ * lot 2 (EF-12, EF-32): Epic/UserStory/Bug chain and workflowState consistency ;
+ * lot 3 (EF-9, EF-12): upstream chain Goal/Roadmap.
  */
 export function runCoverage(assets: ParsedAsset[], graph: AssetGraph): Gap[] {
   const gaps: Gap[] = [];
@@ -49,6 +50,23 @@ export function runCoverage(assets: ParsedAsset[], graph: AssetGraph): Gap[] {
     if (assetType === 'Specification' && acsRefining(id).length === 0) {
       gaps.push({ category: 'spec-without-ac', assetId: id, file: asset.rel,
         message: `Specification ${id} has no AcceptanceCriteria refining it` });
+    }
+
+    if (assetType === 'Goal') {
+      const hasWorkItem = [...downstreamIds(graph, id)].some((t) => typeOf(graph, t) === 'WorkItem');
+      if (!hasWorkItem) {
+        gaps.push({ category: 'goal-without-workitem', assetId: id, file: asset.rel,
+          message: `Goal ${id} has no WorkItem in its downstream chain` });
+      }
+    }
+
+    if (assetType === 'Roadmap') {
+      const goals = outboundRefs(asset)
+        .filter((r) => r.key === 'satisfies' && typeOf(graph, r.target) === 'Goal');
+      if (goals.length === 0) {
+        gaps.push({ category: 'roadmap-without-goal', assetId: id, file: asset.rel,
+          message: `Roadmap element ${id} satisfies no Goal` });
+      }
     }
 
     if (assetType === 'WorkItem') {

@@ -40,6 +40,19 @@ implementation:
 | `QualifyBug` | description brute (+ Spec/BR/AC) → Bug + TC | Qualifie, situe les Assets défaillants (`impacts`), propose le test de non-régression (`dependsOn`) |
 | `RefineWorkItem` | WorkItem → **Report** | Rapport de refinement : ambiguïtés, AC manquants, dépendances, taille, questions — **ne crée aucun Asset** (EF-20) |
 
+### Amont et cérémonies (lot 3)
+
+| Processor | Entrées → Sorties | Usage |
+|---|---|---|
+| `DraftVision` | notes libres (+ Personas) → Vision + Goals | Structure la matière brute ; Goals mesurables |
+| `DraftRoadmap` | Vision + Goals → éléments de Roadmap | Un Asset par élément (DEC-005), critère de sortie inclus |
+| `DraftPersona` | notes d'entretiens → Persona | Fidèle aux notes ; hypothèses non étayées signalées |
+| `PrepareSprintPlanning` | WorkItems + Goals → **Report** | Candidats prêts, dépendances, risques, agenda — jamais de capacité/vélocité |
+| `PrepareSprintReview` | WorkItems + AC + Roadmap → **Report** | Livré vs prévu, scénarios de démo depuis les AC, impact roadmap |
+| `DraftReleaseNotes` | WorkItems `Validated` + AC → Release | Langage métier ; `dependsOn` les WorkItems livrés |
+
+Les sorties `Report` respectent EF-22 : PEF **prépare** les cérémonies, il ne les décide pas.
+
 ## Le circuit d'une génération
 
 1. Le PO lance le prompt (`/draft-user-stories` …) dans VS Code.

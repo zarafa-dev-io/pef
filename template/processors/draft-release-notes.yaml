@@ -1,0 +1,16 @@
+# PEF Processor contract (EF-16).
+processor: DraftReleaseNotes
+version: "1.0"
+description: >-
+  Rédige une Release en langage métier depuis les WorkItems terminés
+  (workflowState Validated) : bénéfices utilisateurs, contenu, vérification.
+inputs:
+  - WorkItem
+  - AcceptanceCriteria
+outputs:
+  - Release
+activities:
+  - Préparer une livraison
+implementation:
+  type: copilot-prompt
+  path: .github/prompts/draft-release-notes.prompt.md

@@ -44,7 +44,10 @@ Dans VS Code, les prompt files sont disponibles via `/` en chat :
 - `/draft-epics` — Roadmap + Requirements → Epics (lot 2) ;
 - `/draft-user-stories` — Epic + Specifications → UserStories + AC (lot 2) ;
 - `/qualify-bug` — description brute → Bug qualifié + test de non-régression (lot 2) ;
-- `/refine-work-item` — WorkItem → rapport de refinement, aucun Asset créé (lot 2).
+- `/refine-work-item` — WorkItem → rapport de refinement, aucun Asset créé (lot 2) ;
+- `/draft-vision`, `/draft-roadmap`, `/draft-persona` — chaîne amont (lot 3) ;
+- `/prepare-sprint-planning`, `/prepare-sprint-review` — rapports de cérémonie (lot 3) ;
+- `/draft-release-notes` — WorkItems validés → Release en langage métier (lot 3).
 
 Toute production IA est créée en `status: Generated` avec son bloc `ai:` de provenance ; **la revue humaine par PR est obligatoire** avant `Approved`.
 

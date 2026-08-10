@@ -20,7 +20,7 @@ PEF est un framework de Product Engineering augmenté par l'IA : la connaissance
 |---|---|---|
 | 1 — Socle | Schémas, moteur `pef` (validate/coverage/trace/impact/signal), assets Copilot, CI, exemple complet | ✅ Livré |
 | 2 — Backlog | WorkItems (Epic/US/Bug), `workflowState`, priorité MoSCoW, Processors backlog et refinement | ✅ Livré |
-| 3 — Amont et cérémonies | Vision, Goals, Roadmap, Personas, Releases ; sprint planning/review | À venir |
+| 3 — Amont et cérémonies | Vision, Goals, Roadmap par élément, Personas, Releases ; sprint planning/review | ✅ Livré |
 | 4 — Documentation | Asset `Documentation`, rétro-documentation, enrichissement déclenché | À venir |
 | 5 — CLI Go | Portage à iso-contrat, binaire unique | Différé |
 

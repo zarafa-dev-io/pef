@@ -1,0 +1,16 @@
+# PEF Processor contract (EF-16).
+processor: DraftRoadmap
+version: "1.0"
+description: >-
+  Propose des éléments de roadmap (un Asset RM- par élément, DEC-005) depuis
+  la Vision et les Goals, chaque élément rattaché au Goal qu'il satisfait.
+inputs:
+  - Vision
+  - Goal
+outputs:
+  - Roadmap
+activities:
+  - Construire et entretenir la roadmap
+implementation:
+  type: copilot-prompt
+  path: .github/prompts/draft-roadmap.prompt.md

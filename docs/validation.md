@@ -48,6 +48,8 @@ npm run pef -- coverage [--strict]   # --strict : exit 1 si trous
 | `bug-without-regression-test` | Bug sans `dependsOn` vers un TestCase de non-régression |
 | `workitem-validated-without-testcase` | WorkItem `Validated` sans TestCase dans sa chaîne |
 | `workitem-inprogress-upstream-draft` | WorkItem `InProgress` dont un Asset amont est repassé en `Draft` |
+| `goal-without-workitem` | Goal qu'aucun WorkItem ne sert (chaîne aval vide) |
+| `roadmap-without-goal` | Élément de roadmap qui ne `satisfies` aucun Goal |
 | `orphan-asset` | Asset sans aucune relation (hors Decisions) |
 | `broken-ref` | Référence cassée (doublonne PEF006, vue « couverture ») |
 

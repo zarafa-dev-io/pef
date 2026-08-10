@@ -7,6 +7,7 @@
 - Tutoriels
   - [Lot 1 — De la spec aux tests](tutorials/lot-1-chaine-de-test.md)
   - [Lot 2 — Le backlog](tutorials/lot-2-backlog.md)
+  - [Lot 3 — Amont et cérémonies](tutorials/lot-3-amont-et-ceremonies.md)
 - Documents fondateurs
   - [Manifeste PEF](manifeste-pef.md)
   - [PRD du MVP](prd-pef-mvp.md)

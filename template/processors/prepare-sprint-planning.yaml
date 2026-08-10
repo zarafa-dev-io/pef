@@ -1,0 +1,17 @@
+# PEF Processor contract (EF-16). Sortie = rapport (EF-22) : PEF prépare
+# la cérémonie, il ne la décide pas.
+processor: PrepareSprintPlanning
+version: "1.0"
+description: >-
+  Prépare un sprint planning : backlog priorisé prêt (Approved/Todo),
+  dépendances entre WorkItems, risques, proposition d'agenda.
+inputs:
+  - WorkItem
+  - Goal
+outputs:
+  - Report
+activities:
+  - Sprint Planning
+implementation:
+  type: copilot-prompt
+  path: .github/prompts/prepare-sprint-planning.prompt.md
