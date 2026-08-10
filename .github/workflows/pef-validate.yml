@@ -1,0 +1,29 @@
+# CI du monorepo PEF : valide l'exemple du template a chaque PR/push.
+# Adaptation du workflow livre dans template/.github/workflows/pef-validate.yml
+# (qui, lui, s'execute dans un repo instancie depuis le template).
+name: pef-validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: template/tools/validate/package-lock.json
+      - name: Install validation engine
+        working-directory: template/tools/validate
+        run: npm ci
+      - name: pef validate
+        working-directory: template/tools/validate
+        run: npm run pef -- validate
+      - name: pef coverage (report only)
+        working-directory: template/tools/validate
+        run: npm run pef -- coverage
