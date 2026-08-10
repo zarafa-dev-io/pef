@@ -14,8 +14,20 @@ PEF est un framework de Product Engineering augmenté par l'IA : la connaissance
 | **Processors** | Ce qu'un humain, un outil ou une IA peut faire sur les Assets |
 | **Relationships** | Le graphe de traçabilité entre Assets |
 
-## Le MVP (lot 1 — Socle)
+## État du MVP
 
-Le lot 1 livre : le schéma des Assets (`template/schemas/`), le moteur de validation `pef` (`template/tools/validate/` — `validate`, `coverage`, `trace`, `impact`, `signal`), les assets IA GitHub Copilot (`template/.github/`), les contrats de Processors, et un exemple complet déroulant la chaîne Vision → Goal → Epic → UserStory → Specification → AcceptanceCriteria → TestPlan → TestCase.
+| Lot | Contenu | État |
+|---|---|---|
+| 1 — Socle | Schémas, moteur `pef` (validate/coverage/trace/impact/signal), assets Copilot, CI, exemple complet | ✅ Livré |
+| 2 — Backlog | WorkItems (Epic/US/Bug), `workflowState`, priorité MoSCoW, Processors backlog et refinement | ✅ Livré |
+| 3 — Amont et cérémonies | Vision, Goals, Roadmap, Personas, Releases ; sprint planning/review | À venir |
+| 4 — Documentation | Asset `Documentation`, rétro-documentation, enrichissement déclenché | À venir |
+| 5 — CLI Go | Portage à iso-contrat, binaire unique | Différé |
 
-Commencez par le [guide de démarrage](getting-started.md).
+## Par où commencer
+
+1. [Démarrer](getting-started.md) — instancier le template et valider son premier Asset ;
+2. [Concepts](concepts.md) — les cinq concepts et les principes ;
+3. [Tutoriel lot 1](tutorials/lot-1-chaine-de-test.md) — de la spécification aux tests ;
+4. [Tutoriel lot 2](tutorials/lot-2-backlog.md) — constituer et vivre le backlog ;
+5. [Référence](reference.md), [Validation](validation.md), [Processors](processors.md) — les pages de consultation.

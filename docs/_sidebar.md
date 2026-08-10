@@ -1,6 +1,12 @@
 - [Accueil](/)
 - [Démarrer](getting-started.md)
+- [Concepts](concepts.md)
 - [Référence du modèle](reference.md)
+- [Moteur de validation](validation.md)
+- [Processors](processors.md)
+- Tutoriels
+  - [Lot 1 — De la spec aux tests](tutorials/lot-1-chaine-de-test.md)
+  - [Lot 2 — Le backlog](tutorials/lot-2-backlog.md)
 - Documents fondateurs
   - [Manifeste PEF](manifeste-pef.md)
   - [PRD du MVP](prd-pef-mvp.md)
