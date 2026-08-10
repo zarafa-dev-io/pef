@@ -1,0 +1,17 @@
+# PEF Processor contract (EF-16). Sortie = rapport, jamais d'Asset (EF-20) :
+# l'analyse éclaire la décision du PO, elle ne la remplace pas.
+processor: RefineWorkItem
+version: "1.0"
+description: >-
+  Analyse un WorkItem et produit un rapport de refinement : ambiguïtés,
+  critères d'acceptation manquants, règles métier manquantes, dépendances,
+  taille excessive, questions ouvertes. Ne crée ni ne modifie aucun Asset.
+inputs:
+  - WorkItem
+outputs:
+  - Report
+activities:
+  - Raffiner le backlog
+implementation:
+  type: copilot-prompt
+  path: .github/prompts/refine-work-item.prompt.md

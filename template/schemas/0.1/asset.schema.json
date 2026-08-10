@@ -22,6 +22,7 @@
       "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$"
     },
     "workItemType": { "enum": ["Epic", "UserStory", "Bug"] },
+    "priority": { "enum": ["Must", "Should", "Could", "Wont"] },
     "docType": { "enum": ["Functional", "Technical", "Onboarding"] },
     "workflowState": { "enum": ["Drafting", "Todo", "InProgress", "Validated"] },
     "externalRef": { "type": "string" },
@@ -51,8 +52,14 @@
   "allOf": [
     {
       "if": { "properties": { "assetType": { "const": "WorkItem" } }, "required": ["assetType"] },
-      "then": { "required": ["workItemType"] },
-      "else": { "not": { "required": ["workItemType"] } }
+      "then": { "required": ["workItemType", "workflowState"] },
+      "else": {
+        "allOf": [
+          { "not": { "required": ["workItemType"] } },
+          { "not": { "required": ["workflowState"] } },
+          { "not": { "required": ["priority"] } }
+        ]
+      }
     },
     {
       "if": { "properties": { "assetType": { "const": "Documentation" } }, "required": ["assetType"] },

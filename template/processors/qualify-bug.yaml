@@ -1,0 +1,20 @@
+# PEF Processor contract (EF-16).
+processor: QualifyBug
+version: "1.0"
+description: >-
+  Qualifie une description brute de dysfonctionnement : Bug structuré,
+  Assets impactés identifiés (impacts), test de non-régression proposé (dependsOn).
+userInputs:
+  - Description brute du dysfonctionnement (texte libre, capture, échange)
+inputs:
+  - Specification
+  - BusinessRule
+  - AcceptanceCriteria
+outputs:
+  - WorkItem   # workItemType: Bug
+  - TestCase   # test de non-régression proposé si aucun cas existant ne couvre
+activities:
+  - Constituer le backlog
+implementation:
+  type: copilot-prompt
+  path: .github/prompts/qualify-bug.prompt.md

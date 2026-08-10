@@ -40,7 +40,11 @@ Dans VS Code, les prompt files sont disponibles via `/` en chat :
 
 - `/generate-acceptance-criteria` — Specification → AcceptanceCriteria ;
 - `/generate-test-plan` — Specification + AC → TestPlan ;
-- `/generate-test-cases` — TestPlan + AC → TestCases.
+- `/generate-test-cases` — TestPlan + AC → TestCases ;
+- `/draft-epics` — Roadmap + Requirements → Epics (lot 2) ;
+- `/draft-user-stories` — Epic + Specifications → UserStories + AC (lot 2) ;
+- `/qualify-bug` — description brute → Bug qualifié + test de non-régression (lot 2) ;
+- `/refine-work-item` — WorkItem → rapport de refinement, aucun Asset créé (lot 2).
 
 Toute production IA est créée en `status: Generated` avec son bloc `ai:` de provenance ; **la revue humaine par PR est obligatoire** avant `Approved`.
 

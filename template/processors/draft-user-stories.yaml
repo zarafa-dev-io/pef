@@ -1,0 +1,18 @@
+# PEF Processor contract (EF-16).
+processor: DraftUserStories
+version: "1.0"
+description: >-
+  Découpe un Epic en UserStories avec leurs critères d'acceptation,
+  en s'appuyant sur les Specifications existantes.
+inputs:
+  - WorkItem      # workItemType: Epic
+  - Specification
+outputs:
+  - WorkItem      # workItemType: UserStory
+  - AcceptanceCriteria
+activities:
+  - Constituer le backlog
+  - Raffiner le backlog
+implementation:
+  type: copilot-prompt
+  path: .github/prompts/draft-user-stories.prompt.md

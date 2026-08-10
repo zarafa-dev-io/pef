@@ -52,3 +52,28 @@ export function buildGraph(assets: ParsedAsset[]): AssetGraph {
 export function assetOfId(graph: AssetGraph, id: string): ParsedAsset | undefined {
   return graph.byId.get(id)?.[0];
 }
+
+/** Transitive closure of assets referencing `id`, directly or indirectly (excludes `id`). */
+export function downstreamIds(graph: AssetGraph, id: string): Set<string> {
+  return closure(id, (current) => (graph.inbound.get(current) ?? []).map((r) => r.source));
+}
+
+/** Transitive closure of assets `id` references, directly or indirectly (excludes `id`). */
+export function upstreamIds(graph: AssetGraph, id: string): Set<string> {
+  return closure(id, (current) => (graph.outbound.get(current) ?? []).map((r) => r.target));
+}
+
+function closure(start: string, next: (id: string) => string[]): Set<string> {
+  const visited = new Set<string>([start]);
+  const queue = [start];
+  while (queue.length > 0) {
+    for (const neighbour of next(queue.shift()!)) {
+      if (!visited.has(neighbour)) {
+        visited.add(neighbour);
+        queue.push(neighbour);
+      }
+    }
+  }
+  visited.delete(start);
+  return visited;
+}

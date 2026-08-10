@@ -1,5 +1,5 @@
 import type { ParsedAsset } from '../lib/assets.js';
-import { outboundRefs, type AssetGraph } from '../lib/graph.js';
+import { downstreamIds, outboundRefs, upstreamIds, type AssetGraph } from '../lib/graph.js';
 
 export interface Gap {
   category: string;
@@ -11,7 +11,10 @@ export interface Gap {
 const typeOf = (graph: AssetGraph, id: string): string | undefined =>
   graph.byId.get(id)?.[0]?.fm?.assetType as string | undefined;
 
-/** Lot 1 coverage rules (EF-12): REQ/SPEC/AC chain, orphans, broken refs. */
+/**
+ * Coverage rules — lot 1 (EF-12): REQ/SPEC/AC chain, orphans, broken refs ;
+ * lot 2 (EF-12, EF-32): Epic/UserStory/Bug chain and workflowState consistency.
+ */
 export function runCoverage(assets: ParsedAsset[], graph: AssetGraph): Gap[] {
   const gaps: Gap[] = [];
   const valid = assets.filter((a): a is ParsedAsset & { fm: NonNullable<ParsedAsset['fm']> } =>
@@ -46,6 +49,49 @@ export function runCoverage(assets: ParsedAsset[], graph: AssetGraph): Gap[] {
     if (assetType === 'Specification' && acsRefining(id).length === 0) {
       gaps.push({ category: 'spec-without-ac', assetId: id, file: asset.rel,
         message: `Specification ${id} has no AcceptanceCriteria refining it` });
+    }
+
+    if (assetType === 'WorkItem') {
+      const workItemType = asset.fm.workItemType as string | undefined;
+      const workflowState = asset.fm.workflowState as string | undefined;
+      const down = [...downstreamIds(graph, id)];
+      const downByType = (t: string) => down.filter((d) => typeOf(graph, d) === t);
+      const regressionTests = outboundRefs(asset)
+        .filter((r) => r.key === 'dependsOn' && typeOf(graph, r.target) === 'TestCase');
+
+      if (workItemType === 'Epic') {
+        const stories = (graph.inbound.get(id) ?? []).filter((r) =>
+          r.key === 'refines' && graph.byId.get(r.source)?.[0]?.fm?.workItemType === 'UserStory');
+        if (stories.length === 0) {
+          gaps.push({ category: 'epic-without-userstory', assetId: id, file: asset.rel,
+            message: `Epic ${id} has no UserStory refining it` });
+        }
+      }
+
+      if (workItemType === 'UserStory' && downByType('AcceptanceCriteria').length === 0) {
+        gaps.push({ category: 'userstory-without-ac', assetId: id, file: asset.rel,
+          message: `UserStory ${id} has no AcceptanceCriteria in its downstream chain` });
+      }
+
+      if (workItemType === 'Bug' && regressionTests.length === 0) {
+        gaps.push({ category: 'bug-without-regression-test', assetId: id, file: asset.rel,
+          message: `Bug ${id} has no non-regression TestCase (dependsOn a TC-)` });
+      }
+
+      if (workflowState === 'Validated' &&
+          downByType('TestCase').length === 0 && regressionTests.length === 0) {
+        gaps.push({ category: 'workitem-validated-without-testcase', assetId: id, file: asset.rel,
+          message: `WorkItem ${id} is Validated but no TestCase verifies its chain` });
+      }
+
+      if (workflowState === 'InProgress') {
+        const draftUpstream = [...upstreamIds(graph, id)]
+          .filter((t) => graph.byId.get(t)?.[0]?.fm?.status === 'Draft');
+        if (draftUpstream.length > 0) {
+          gaps.push({ category: 'workitem-inprogress-upstream-draft', assetId: id, file: asset.rel,
+            message: `WorkItem ${id} is InProgress but upstream asset(s) went back to Draft: ${draftUpstream.join(', ')}` });
+        }
+      }
     }
 
     if (assetType === 'AcceptanceCriteria') {

@@ -5,7 +5,9 @@ workItemType: Epic
 id: EPIC-001
 title: Gestion des fiches clients
 status: Approved
-version: 1.0.0
+version: 1.1.0
+priority: Must
+workflowState: InProgress
 satisfies: [RM-001]
 ---
 

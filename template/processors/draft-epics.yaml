@@ -1,0 +1,16 @@
+# PEF Processor contract (EF-16).
+processor: DraftEpics
+version: "1.0"
+description: >-
+  Propose des Epics à partir de la roadmap et des exigences existantes,
+  chaque Epic rattaché à l'élément de roadmap ou au Goal qu'il satisfait.
+inputs:
+  - Roadmap
+  - Requirement
+outputs:
+  - WorkItem   # workItemType: Epic
+activities:
+  - Constituer le backlog
+implementation:
+  type: copilot-prompt
+  path: .github/prompts/draft-epics.prompt.md

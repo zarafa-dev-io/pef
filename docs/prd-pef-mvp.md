@@ -4,7 +4,7 @@ assetType: PRD
 id: PRD-001
 title: PEF MVP — PEF-PO complet, de la vision aux tests fonctionnels
 status: Draft
-version: 0.11.0
+version: 0.12.0
 refines: [MANIFESTO-001]
 ai:
   generated: true
@@ -220,7 +220,7 @@ Le MVP est réussi si un utilisateur (persona PO pionnier) peut, sur un projet p
 - **QO-3** — ~~Projet pilote~~ **Tranchée (v0.5.0)** : pilote principal = l'IDE VS Code en TypeScript ; contre-pilote mainframe COBOL au lot 4 (voir §4, « Projet pilote »). À formaliser dans une Decision (`DEC-`).
 - **QO-4** — Les `AcceptanceCriteria` en Gherkin obligatoire, ou format libre avec Gherkin recommandé ?
 - **QO-5** — Nommage définitif des préfixes d'IDs et des suffixes de fichiers (EF-35), et politique de renumérotation interdite : à figer dans une Decision avant le premier pilote.
-- **QO-6** — Priorisation : la priorité d'un WorkItem est-elle un champ de front matter (`priority`), un ordre dans un Asset `Backlog` dédié, ou laissée à l'outil d'exécution (Jira) ?
+- **QO-6** — ~~Priorisation~~ **Tranchée (v0.12.0, DEC-004)** : champ optionnel `priority: Must | Should | Could | Wont` sur les WorkItems, exploitable par les Processors ; l'ordonnancement fin (ordre total) reste à l'outil d'exécution via `externalRef`. Pas d'Asset `Backlog` dédié.
 - **QO-7** — La Roadmap : un Asset unique versionné, ou un Asset par élément de roadmap (traçabilité plus fine, maintenance plus lourde) ?
 - **QO-8** — Accès au code pour la rétro-doc : le code source vit hors du repo PEF — les Processors y accèdent comment (workspace multi-root VS Code, chemin configuré, extraits fournis) et les `codeRefs` survivent-ils aux refactorings ?
 - **QO-10** — À clarifier avec zDevOps : qu'est-il exécutable dans les GitHub Actions SG — script embarqué au repo, binaire externe, actions du marketplace ? La réponse conditionne l'activation du mode CI-renfort ; le mode local reste la base garantie.

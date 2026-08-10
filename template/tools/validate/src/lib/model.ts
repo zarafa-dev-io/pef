@@ -66,6 +66,7 @@ export interface FrontMatter {
   workItemType?: string;
   docType?: string;
   workflowState?: string;
+  priority?: string;
   externalRef?: string;
   codeRefs?: string[];
   ai?: Record<string, unknown>;
@@ -90,6 +91,15 @@ export const ALL_SUFFIXES = [
   ...Object.values(PREFIX_BY_TYPE),
   ...Object.values(PREFIX_BY_WORKITEM_TYPE),
 ].map((p) => p.toLowerCase());
+
+// EF-30: WorkItem realization axis, independent from the content-validity axis
+// (status). Adjacent moves only, forward and backward.
+export const ALLOWED_WORKFLOW_TRANSITIONS: Record<string, string[]> = {
+  Drafting: ['Todo'],
+  Todo: ['Drafting', 'InProgress'],
+  InProgress: ['Todo', 'Validated'],
+  Validated: ['InProgress'],
+};
 
 // EF-4: Draft -> Review -> Approved -> Deprecated (+ Generated for unreviewed AI output).
 // Going back to Draft/Review is allowed (content re-enters review); skipping review
