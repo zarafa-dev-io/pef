@@ -36,6 +36,7 @@ jobs:
     needs: validate
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       issues: write
     env:
       GH_TOKEN: ${{ github.token }}
