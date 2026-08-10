@@ -1,0 +1,16 @@
+# PEF Processor contract (EF-16).
+processor: GenerateTestPlan
+version: "1.0"
+description: >-
+  Construit le plan de recette d'une spécification à partir de ses critères
+  d'acceptation : périmètre, stratégie, matrice de couverture AC -> TestCase.
+inputs:
+  - Specification
+  - AcceptanceCriteria
+outputs:
+  - TestPlan
+activities:
+  - Préparer la recette
+implementation:
+  type: copilot-prompt
+  path: .github/prompts/generate-test-plan.prompt.md

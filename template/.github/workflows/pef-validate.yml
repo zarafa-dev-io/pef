@@ -1,0 +1,30 @@
+# EF-14 — PEF validation on every PR (and pushes to main).
+# CI is an optional relay (PRD §7): the reference mode is local execution
+# (`cd tools/validate && npm run pef -- validate`). This workflow runs only
+# deterministic checks — never any AI call (NFR-1).
+name: pef-validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/validate/package-lock.json
+      - name: Install validation engine
+        working-directory: tools/validate
+        run: npm ci
+      - name: pef validate
+        working-directory: tools/validate
+        run: npm run pef -- validate
+      - name: pef coverage (report only)
+        working-directory: tools/validate
+        run: npm run pef -- coverage

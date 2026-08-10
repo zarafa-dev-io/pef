@@ -1,0 +1,6 @@
+- [Accueil](/)
+- [Démarrer](getting-started.md)
+- [Référence du modèle](reference.md)
+- Documents fondateurs
+  - [Manifeste PEF](manifeste-pef.md)
+  - [PRD du MVP](prd-pef-mvp.md)

@@ -1,0 +1,23 @@
+{
+  "name": "@pef/validate",
+  "version": "0.1.0",
+  "private": true,
+  "description": "PEF validation engine (MVP): validate, coverage, trace, impact, signal",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "pef": "tsx src/cli.ts",
+    "validate": "tsx src/cli.ts validate",
+    "coverage": "tsx src/cli.ts coverage"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "yaml": "^2.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.0"
+  }
+}

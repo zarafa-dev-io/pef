@@ -1,0 +1,18 @@
+# PEF Processor contract (EF-16). The contract is AI-agnostic; the Copilot
+# prompt file referenced below is the reference implementation (substitutable).
+processor: GenerateAcceptanceCriteria
+version: "1.0"
+description: >-
+  Dérive les critères d'acceptation d'une spécification approuvée, en couvrant
+  les cas nominaux, les cas limites et les erreurs attendues.
+inputs:
+  - Specification
+  - BusinessRule
+  - NonFunctionalRequirement
+outputs:
+  - AcceptanceCriteria
+activities:
+  - Définir l'acceptation
+implementation:
+  type: copilot-prompt
+  path: .github/prompts/generate-acceptance-criteria.prompt.md

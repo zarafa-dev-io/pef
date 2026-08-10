@@ -1,0 +1,16 @@
+# PEF Processor contract (EF-16).
+processor: GenerateTestCases
+version: "1.0"
+description: >-
+  Rédige les cas de test exécutables d'un plan de recette, chaque TestCase
+  vérifiant explicitement au moins un critère d'acceptation.
+inputs:
+  - TestPlan
+  - AcceptanceCriteria
+outputs:
+  - TestCase
+activities:
+  - Préparer la recette
+implementation:
+  type: copilot-prompt
+  path: .github/prompts/generate-test-cases.prompt.md

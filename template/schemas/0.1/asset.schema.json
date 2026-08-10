@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pef.dev/schemas/0.1/asset.schema.json",
+  "title": "PEF Product Asset front matter (pefVersion 0.1)",
+  "type": "object",
+  "required": ["pefVersion", "assetType", "id", "title", "status", "version"],
+  "properties": {
+    "pefVersion": { "const": "0.1" },
+    "assetType": {
+      "enum": [
+        "Vision", "Goal", "Roadmap", "Persona", "WorkItem",
+        "Requirement", "BusinessRule", "NonFunctionalRequirement",
+        "Specification", "AcceptanceCriteria", "TestPlan", "TestCase",
+        "Decision", "Release", "Documentation"
+      ]
+    },
+    "id": { "$ref": "#/$defs/assetId" },
+    "title": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["Draft", "Review", "Approved", "Deprecated", "Generated"] },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$"
+    },
+    "workItemType": { "enum": ["Epic", "UserStory", "Bug"] },
+    "docType": { "enum": ["Functional", "Technical", "Onboarding"] },
+    "workflowState": { "enum": ["Drafting", "Todo", "InProgress", "Validated"] },
+    "externalRef": { "type": "string" },
+    "codeRefs": { "type": "array", "items": { "type": "string" } },
+    "ai": {
+      "type": "object",
+      "required": ["generated"],
+      "properties": {
+        "generated": { "type": "boolean" },
+        "processor": { "type": "string" },
+        "processorVersion": { "type": ["string", "number"] },
+        "reviewed": { "type": "boolean" },
+        "reviewedBy": { "type": "string" },
+        "reviewedAt": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "refines": { "$ref": "#/$defs/idList" },
+    "satisfies": { "$ref": "#/$defs/idList" },
+    "verifies": { "$ref": "#/$defs/idList" },
+    "dependsOn": { "$ref": "#/$defs/idList" },
+    "supersedes": { "$ref": "#/$defs/idList" },
+    "impacts": { "$ref": "#/$defs/idList" },
+    "documents": { "$ref": "#/$defs/idList" }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": { "properties": { "assetType": { "const": "WorkItem" } }, "required": ["assetType"] },
+      "then": { "required": ["workItemType"] },
+      "else": { "not": { "required": ["workItemType"] } }
+    },
+    {
+      "if": { "properties": { "assetType": { "const": "Documentation" } }, "required": ["assetType"] },
+      "then": { "required": ["docType"] },
+      "else": { "not": { "required": ["docType"] } }
+    },
+    {
+      "if": { "properties": { "status": { "const": "Generated" } }, "required": ["status"] },
+      "then": {
+        "required": ["ai"],
+        "properties": { "ai": { "type": "object", "properties": { "generated": { "const": true } }, "required": ["generated"] } }
+      }
+    }
+  ],
+  "$defs": {
+    "assetId": {
+      "type": "string",
+      "pattern": "^(VIS|GOAL|RM|PER|EPIC|US|BUG|REQ|BR|NFR|SPEC|AC|TP|TC|DEC|REL|DOC)-\\d{3,}$"
+    },
+    "idList": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/assetId" },
+      "uniqueItems": true
+    }
+  }
+}
