@@ -3,7 +3,7 @@ pefVersion: "0.1"
 assetType: Decision
 id: DEC-003
 title: Sémantique du versioning des Assets et non-invalidation automatique de l'aval
-status: Generated
+status: Review
 version: 1.0.0
 ai:
   generated: true
