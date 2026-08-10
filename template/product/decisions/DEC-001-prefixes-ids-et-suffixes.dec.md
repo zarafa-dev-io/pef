@@ -3,7 +3,7 @@ pefVersion: "0.1"
 assetType: Decision
 id: DEC-001
 title: Préfixes d'IDs, suffixes de fichiers et interdiction de renumérotation
-status: Draft
+status: Review
 version: 1.0.0
 ai:
   generated: true

@@ -3,7 +3,7 @@ pefVersion: "0.1"
 assetType: Decision
 id: DEC-002
 title: Gherkin recommandé mais non obligatoire pour les AcceptanceCriteria
-status: Draft
+status: Review
 version: 1.0.0
 ai:
   generated: true
