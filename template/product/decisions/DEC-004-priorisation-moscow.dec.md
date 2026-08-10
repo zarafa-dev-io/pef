@@ -3,12 +3,14 @@ pefVersion: "0.1"
 assetType: Decision
 id: DEC-004
 title: Priorisation des WorkItems par champ MoSCoW, ordonnancement fin hors PEF
-status: Review
+status: Approved
 version: 1.0.0
 ai:
   generated: true
   processor: Claude
-  reviewed: false
+  reviewed: true
+  reviewedBy: ROLE-PO
+  reviewedAt: "2026-08-10"
 ---
 
 # Priorisation des WorkItems par champ MoSCoW, ordonnancement fin hors PEF
