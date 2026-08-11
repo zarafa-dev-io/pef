@@ -37,7 +37,13 @@ Deux familles de sorties :
 - **des Assets** — toujours créés en `status: Generated` avec leur provenance ;
 - **`Report`** — un rapport en chat, *aucun fichier créé* : pour les analyses où la décision doit rester humaine (refinement, cérémonies).
 
-## Les 19 Processors livrés
+## Les 20 Processors livrés
+
+### Démarrage
+
+| Prompt | Entrées → Sorties | Ce qu'il fait |
+|---|---|---|
+| `/start-project` | choix du point de départ → **Report** | Le point d'entrée d'un nouveau projet : diagnostic du dépôt, puis parcours guidé — **de zéro** (vision → backlog → specs → tests) ou **depuis un code existant** (rétro-doc d'abord, puis l'amont). Orchestre les Processors spécialisés, ne crée aucun Asset lui-même |
 
 ### Chaîne de test (lot 1)
 

@@ -20,6 +20,8 @@ PEF n'est pas une application : c'est un **dépôt Git structuré** (des fichier
 
 Ouvrez un terminal (dans VS Code : menu *Terminal → New Terminal*) et lancez les commandes de vérification : chacune doit répondre par un numéro de version, pas par une erreur.
 
+> **Le chemin le plus court** : une fois le template instancié (étapes 3-4), lancez `/start-project` dans le chat Copilot — il diagnostique votre dépôt puis vous guide pas à pas, que vous partiez **de zéro** ou **d'un code existant** à rétro-documenter. Les étapes 5 à 8 ci-dessous détaillent ce qu'il orchestre.
+
 ## 3. Instancier le template
 
 Au MVP, on instancie **par copie** (la commande `pef init` viendra plus tard) :
@@ -149,7 +151,7 @@ Puis committez : `git add -A && git commit -m "REQ-002 : recherche client"`.
 ## 7. Votre première génération IA
 
 1. Dans VS Code, ouvrez le chat Copilot (icône chat, ou `Ctrl+Alt+I`).
-2. Tapez `/` : la liste des prompts du dépôt apparaît (ils viennent de `.github/prompts/` — la liste complète des 19 Processors est dans [la page Processors](processors.md)).
+2. Tapez `/` : la liste des prompts du dépôt apparaît (ils viennent de `.github/prompts/` — la liste complète des 20 Processors est dans [la page Processors](processors.md)).
 3. Choisissez `/generate-acceptance-criteria` et indiquez `SPEC-001`.
 4. Le Processor lit la spec, ses règles métier et NFR **directement dans le repo**, puis propose des fichiers AC.
 
