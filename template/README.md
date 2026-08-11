@@ -26,6 +26,7 @@ npm run pef -- coverage [--strict]            # trous de traçabilité
 npm run pef -- trace <ID>                     # chaîne amont/aval d'un asset
 npm run pef -- impact <ID>                    # assets aval impactés (tests signalés)
 npm run pef -- signal [--apply]               # sync des écarts vers des issues GitHub (gh)
+npm run pef -- summary                        # régénère product/README.md, le sommaire des Assets
 ```
 
 L'exemple `product/` déroule la chaîne complète Vision → Goal → Epic → UserStory → Requirement/BusinessRule/NFR → Specification → AcceptanceCriteria → TestPlan → TestCase, plus deux Decisions. Remplacez-le par vos propres Assets en conservant les conventions (voir `docs/reference.md` du monorepo).

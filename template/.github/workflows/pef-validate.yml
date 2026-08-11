@@ -29,6 +29,38 @@ jobs:
         working-directory: tools/validate
         run: npm run pef -- coverage
 
+  # Auto-refresh the product summary (product/README.md) on every push.
+  summary:
+    if: github.event_name == 'push'
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/validate/package-lock.json
+      - name: Install validation engine
+        working-directory: tools/validate
+        run: npm ci
+      - name: pef summary
+        working-directory: tools/validate
+        run: npm run pef -- summary
+      - name: Commit si change
+        run: |
+          if ! git diff --quiet product/README.md; then
+            git config user.name "pef-bot"
+            git config user.email "actions@users.noreply.github.com"
+            git add product/README.md
+            git commit -m "product : sommaire regenere automatiquement (pef summary)"
+            git push
+          else
+            echo "Sommaire deja a jour."
+          fi
+
   # EF-31 step 1 / EF-33 relay: deterministic detection -> GitHub issues.
   # AI execution (EnrichDocumentation & co) always stays on the workstation.
   signal:

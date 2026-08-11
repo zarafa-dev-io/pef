@@ -6,6 +6,9 @@ import { runCoverage } from './commands/coverage.js';
 import { runTrace } from './commands/trace.js';
 import { runImpact } from './commands/impact.js';
 import { computeActions, applyActions } from './commands/signal.js';
+import { buildSummary } from './commands/summary.js';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 const HELP = `pef — PEF validation engine (MVP, Node/TypeScript)
 
@@ -17,6 +20,7 @@ Commands:
   trace <ID>                     Bidirectional traceability chain of an asset (EF-13)
   impact <ID>                    Downstream assets impacted by a change (EF-24)
   signal [--apply]               Sync gaps to GitHub issues via gh; default is dry-run (EF-33)
+  summary                        Generate product/README.md, the asset index (auto-refreshed by CI)
 
 Options:
   --root <dir>                   Product assets root (default: <repo>/product)
@@ -79,6 +83,15 @@ switch (command) {
       const flag = asset.assetType === 'TestCase' || asset.assetType === 'TestPlan' ? '  ⚠ test asset' : '';
       console.log(`${asset.id}  [${asset.assetType}]  ${asset.title}  (via ${asset.via})${flag}`);
     }
+    process.exit(0);
+  }
+  case 'summary': {
+    const assets = loadAssets(root);
+    const graph = buildGraph(assets);
+    const gaps = runCoverage(assets, graph);
+    const outFile = path.join(root, 'README.md');
+    fs.writeFileSync(outFile, buildSummary(assets, gaps), 'utf8');
+    console.log(`${outFile}: ${assets.length} asset(s) indexed, ${gaps.length} gap(s) reported.`);
     process.exit(0);
   }
   case 'signal': {

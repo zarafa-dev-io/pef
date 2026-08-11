@@ -108,6 +108,16 @@ npm run pef -- impact SPEC-001
 
 Liste la fermeture aval complète — tout ce qui, directement ou indirectement, s'appuie sur l'Asset — avec les tests marqués `⚠`. **Réflexe à prendre avant toute modification de Specification**, et à coller dans la description de la PR.
 
+## `summary` — le sommaire vivant du produit
+
+```bash
+npm run pef -- summary
+```
+
+Génère **`product/README.md`** : l'index de tous les Assets, groupés dans l'ordre de lecture (vision → objectifs → roadmap → backlog → exigences → specs → recette → décisions → releases → documentation), avec pour chacun son lien, son statut et sa version — plus les colonnes utiles par famille (priorité et réalisation des WorkItems, état à jour/périmée des Documentations). GitHub l'affiche automatiquement en tête du répertoire `product/`.
+
+La CI le **régénère à chaque push** (job `summary`) : le sommaire ne ment jamais, il n'est pas maintenu à la main. Sortie 100 % déterministe, aucune IA (NFR-1).
+
 ## `signal` — transformer les rapports en travail d'équipe
 
 ```bash
