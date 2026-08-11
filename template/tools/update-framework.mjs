@@ -68,6 +68,9 @@ for (const fwPath of FRAMEWORK_PATHS) {
   const srcFiles = fs.existsSync(srcBase) && fs.statSync(srcBase).isDirectory() ? walk(srcBase)
     : fs.existsSync(srcBase) ? [srcBase] : [];
 
+  // Comparaison insensible aux fins de ligne : git les normalise de toute façon
+  // (autocrlf), un simple CRLF/LF ne doit pas compter comme une mise à jour.
+  const normalized = (buffer) => buffer.toString('utf8').replace(/\r\n/g, '\n');
   for (const file of srcFiles) {
     const rel = path.relative(src, file);
     const dest = path.join(repoRoot, rel);
@@ -76,7 +79,7 @@ for (const fwPath of FRAMEWORK_PATHS) {
       fs.mkdirSync(path.dirname(dest), { recursive: true });
       fs.writeFileSync(dest, content);
       report.added.push(rel);
-    } else if (!content.equals(fs.readFileSync(dest))) {
+    } else if (normalized(content) !== normalized(fs.readFileSync(dest))) {
       fs.writeFileSync(dest, content);
       report.updated.push(rel);
     } else {
