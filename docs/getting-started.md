@@ -225,7 +225,28 @@ npx serve docs        # depuis la racine du monorepo, puis http://localhost:3000
 
 > Ouvrir `index.html` directement depuis l'explorateur de fichiers (`file://`) ne fonctionne pas — le navigateur bloque le chargement des pages : il faut servir le dossier en HTTP (la commande ci-dessus suffit).
 
-## 10. Dépannage
+## 10. Mettre à jour le framework (sans perdre vos Assets)
+
+Un repo PEF a deux propriétaires, et la mise à jour respecte cette frontière :
+
+| Propriétaire | Chemins | À la mise à jour |
+|---|---|---|
+| **Le framework** | `schemas/`, `tools/`, `processors/`, `.github/` (instructions, prompts, workflow `pef-validate`) | écrasés par la nouvelle version |
+| **Votre projet** | `product/` (tous vos `.md`), `README.md`, vos prompts et contrats customs | **jamais touchés** |
+
+```bash
+git checkout -b maj-framework      # toujours sur une branche, arbre propre
+node tools/update-framework.mjs    # récupère le template officiel et met à jour
+cd tools/validate && npm install   # dépendances éventuellement mises à jour
+npm run pef -- validate            # le modèle a-t-il bougé ?
+git diff                           # relisez, puis PR
+```
+
+Le script fonctionne en **écrasement seul** : il ne supprime rien. Vos fichiers customs (un prompt maison dans `.github/prompts/`, un contrat dans `processors/`) sont détectés et listés comme « non touchés » ; un fichier retiré du template est signalé comme possiblement obsolète, mais c'est vous qui le supprimez. Vos Assets `product/` ne sont même pas regardés.
+
+> Votre projet date d'avant ce script ? Récupérez-le une fois à la main (clone sparse du §3, copiez `tools/update-framework.mjs`), il se mettra à jour lui-même ensuite. Si le template officiel vit ailleurs que dans le monorepo public, pointez-le : `PEF_TEMPLATE_REPO=https://... node tools/update-framework.mjs`.
+
+## 11. Dépannage
 
 - **`npm run pef` ne fait rien** → il manque le `--` avant la commande.
 - **`node` introuvable** → Node.js n'est pas installé ou pas dans le PATH ; réinstallez depuis nodejs.org et rouvrez le terminal.
