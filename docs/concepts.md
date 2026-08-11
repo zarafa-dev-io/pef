@@ -15,13 +15,13 @@ PEF propose de ranger toute cette connaissance au même endroit, **dans un dép�
 ```
                          PEF
                           │
-        ┌─────────────────┼─────────────────┐
+        ┌──────────────────┼─────────────────┐
         │                 │                 │
       ASSETS          ACTIVITIES        PROCESSORS
         │                 │                 │
      Knowledge           Work          AI / Tools
         │                 │                 │
-        └─────────────────┼─────────────────┘
+        └──────────────────┼─────────────────┘
                           │
                         ROLES
 ```
