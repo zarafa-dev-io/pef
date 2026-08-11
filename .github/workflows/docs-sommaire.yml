@@ -1,0 +1,39 @@
+# Régénère docs/sommaire.md à chaque évolution de la documentation.
+# Le commit du bot ne redéclenche pas le workflow (paths exclut sommaire.md,
+# et les pushes GITHUB_TOKEN ne relancent pas les workflows on:push).
+name: docs-sommaire
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - '!docs/sommaire.md'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Regenerer le sommaire
+        run: node docs/build-sommaire.mjs
+      - name: Commit si change
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! git diff --quiet docs/sommaire.md; then
+            git config user.name "pef-docs-bot"
+            git config user.email "actions@users.noreply.github.com"
+            git add docs/sommaire.md
+            git commit -m "docs : sommaire regenere automatiquement"
+            git push
+            gh api -X POST "repos/${GITHUB_REPOSITORY}/pages/builds" || true
+          else
+            echo "Sommaire deja a jour."
+          fi

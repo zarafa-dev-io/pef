@@ -1,5 +1,6 @@
 - **Prise en main**
   - [Accueil](/)
+  - [Sommaire détaillé](sommaire.md)
   - [Démarrer pas à pas](getting-started.md)
   - [Glossaire](glossaire.md)
 - **Comprendre**
