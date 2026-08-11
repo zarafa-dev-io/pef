@@ -10,6 +10,12 @@ Les méthodes changent. Les outils changent. Les IA changent. Les Product Assets
 
 [Les cinq concepts](README.md#les-cinq-concepts) · [État du MVP](README.md#état-du-mvp) · [Par où commencer](README.md#par-où-commencer) · [Lire cette documentation confortablement](README.md#lire-cette-documentation-confortablement)
 
+### [Sommaire de la documentation](sommaire.md)
+
+Page générée par node docs/build-sommaire.mjs et régénérée automatiquement à chaque évolution de docs/ (workflow docs-sommaire). Ne pas l'éditer à la main.
+
+[Prise en main](sommaire.md#prise-en-main) · [Comprendre](sommaire.md#comprendre) · [Tutoriels](sommaire.md#tutoriels) · [Référence](sommaire.md#référence) · [Documents fondateurs](sommaire.md#documents-fondateurs)
+
 ### [Démarrer pas à pas](getting-started.md)
 
 Ce guide s'adresse à un Product Owner (ou QA, BA…) qui n'a jamais utilisé PEF. À la fin, vous aurez un dépôt PEF fonctionnel, vous saurez lire et créer un Asset, le valider, et lancer votre première génération IA.
@@ -68,7 +74,7 @@ La description complète du contrat des Assets. La source de vérité formelle e
 
 Le moteur est un petit outil en ligne de commande, embarqué dans chaque repo PEF (tools/validate/). Il est 100 % local et déterministe : aucun appel IA, aucun réseau — les mêmes fichiers en entrée donnent toujours le…
 
-[Préparer et lancer](validation.md#préparer-et-lancer) · [Lire un rapport](validation.md#lire-un-rapport) · [validate — les 11 règles bloquantes](validation.md#validate-—-les-11-règles-bloquantes) · [coverage — les 13 trous de traçabilité](validation.md#coverage-—-les-13-trous-de-traçabilité) · [trace — d'où ça vient, où ça va](validation.md#trace-—-doù-ça-vient-où-ça-va) · [impact — qu'est-ce que je casse si je change ceci ?](validation.md#impact-—-quest-ce-que-je-casse-si-je-change-ceci-) · [signal — transformer les rapports en travail d'équipe](validation.md#signal-—-transformer-les-rapports-en-travail-déquipe) · [La CI : un renfort, pas une dépendance](validation.md#la-ci-un-renfort-pas-une-dépendance) · [Performances](validation.md#performances)
+[Préparer et lancer](validation.md#préparer-et-lancer) · [Lire un rapport](validation.md#lire-un-rapport) · [validate — les 11 règles bloquantes](validation.md#validate-—-les-11-règles-bloquantes) · [coverage — les 13 trous de traçabilité](validation.md#coverage-—-les-13-trous-de-traçabilité) · [trace — d'où ça vient, où ça va](validation.md#trace-—-doù-ça-vient-où-ça-va) · [impact — qu'est-ce que je casse si je change ceci ?](validation.md#impact-—-quest-ce-que-je-casse-si-je-change-ceci-) · [summary — le sommaire vivant du produit](validation.md#summary-—-le-sommaire-vivant-du-produit) · [signal — transformer les rapports en travail d'équipe](validation.md#signal-—-transformer-les-rapports-en-travail-déquipe) · [La CI : un renfort, pas une dépendance](validation.md#la-ci-un-renfort-pas-une-dépendance) · [Performances](validation.md#performances)
 
 ### [Les Processors](processors.md)
 
