@@ -43,7 +43,7 @@ Deux familles de sorties :
 
 | Prompt | Entrées → Sorties | Ce qu'il fait |
 |---|---|---|
-| `/start-project` | choix du point de départ → **Report** | Le point d'entrée d'un nouveau projet : diagnostic du dépôt, puis parcours guidé — **de zéro** (vision → backlog → specs → tests) ou **depuis un code existant** (rétro-doc d'abord, puis l'amont). Orchestre les Processors spécialisés, ne crée aucun Asset lui-même |
+| `/start-project` | choix du point de départ → **Report** (+ plan de rétro-doc) | Le point d'entrée d'un nouveau projet : diagnostic du dépôt, puis parcours guidé — **de zéro** (vision → backlog → specs → tests) ou **depuis un code existant** (rétro-doc d'abord, puis l'amont). Sur un gros système : inventaire, découpage en périmètres, et **le reste à faire vit en backlog** (une UserStory par périmètre avec checklist d'avancement, visible dans `pef summary`) — la rétro-doc se mène en plusieurs sessions, StartProject détecte le plan et reprend où on s'était arrêté |
 
 ### Chaîne de test (lot 1)
 

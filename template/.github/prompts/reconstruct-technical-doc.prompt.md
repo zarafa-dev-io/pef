@@ -29,4 +29,4 @@ Règles d'honnêteté : documente ce que le code **fait**, pas ce qu'il devrait 
 
 ## Vérification finale
 
-`cd tools/validate && npm run pef -- validate`. Propose d'enchaîner avec `/extract-business-rules` sur le même périmètre. Rappelle la revue humaine avant `Approved`.
+`cd tools/validate && npm run pef -- validate`. Si une UserStory de rétro-documentation couvre ce périmètre (plan StartProject), coche sa ligne « B2 — Documentation technique » avec les IDs produits. Propose d'enchaîner avec `/extract-business-rules` sur le même périmètre. Rappelle la revue humaine avant `Approved`.

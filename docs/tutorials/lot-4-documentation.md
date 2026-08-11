@@ -86,6 +86,8 @@ Le niveau `observed`/`inferred` est le garde-fou central de la rétro-doc : une 
 
 Ce flux est agnostique au langage : il se déroule à l'identique sur du TypeScript ou sur une chaîne COBOL/JCL — c'est l'objet du contre-pilote mainframe prévu en fin de MVP.
 
+**Sur un gros système, la rétro-doc se mène en plusieurs sessions** : `/start-project` commence par un inventaire et découpe le code en périmètres, puis crée le plan **en backlog** — un Epic « Rétro-documentation » et une UserStory par périmètre, chacune portant sa checklist d'avancement (B2 doc technique → B5 tests). Le « reste à faire » n'est pas un fichier à part : c'est le tableau Backlog de `pef summary`, tenu à jour par la CI. À chaque session, `/start-project` détecte le plan et propose de reprendre au périmètre suivant.
+
 ## 5. Le parcours d'onboarding
 
 ```

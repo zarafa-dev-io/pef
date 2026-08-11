@@ -45,4 +45,4 @@ Tu documentes ce que le système **fait**, pas ce qu'il devrait faire. Un compor
 
 ## Vérification finale
 
-`cd tools/validate && npm run pef -- validate && npm run pef -- coverage`. Rapport final : couverture règle par règle, comportements suspects à qualifier en bugs, zones non caractérisées. Rappelle la revue humaine avant `Approved`.
+`cd tools/validate && npm run pef -- validate && npm run pef -- coverage`. Rapport final : couverture règle par règle, comportements suspects à qualifier en bugs, zones non caractérisées. Si une UserStory de rétro-documentation couvre ce périmètre, coche sa ligne « B5 — Tests de caractérisation ». Rappelle la revue humaine avant `Approved`.

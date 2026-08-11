@@ -28,4 +28,4 @@ Traduis le « comment » technique en « quoi » métier :
 
 ## Vérification finale
 
-`cd tools/validate && npm run pef -- validate && npm run pef -- coverage`. Rappelle la revue humaine avant `Approved`.
+`cd tools/validate && npm run pef -- validate && npm run pef -- coverage`. Si une UserStory de rétro-documentation couvre ce périmètre, coche sa ligne « B4 — Documentation fonctionnelle ». Rappelle la revue humaine avant `Approved`.

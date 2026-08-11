@@ -26,4 +26,4 @@ Règles d'honnêteté : en cas de doute, `inferred` ; si le code contredit une B
 
 ## Vérification finale
 
-`cd tools/validate && npm run pef -- validate`, puis `npm run pef -- signal` : chaque règle `inferred` non approuvée génère une issue `rules-to-validate`. Rappelle que la validation métier des `inferred` conditionne leur approbation.
+`cd tools/validate && npm run pef -- validate`, puis `npm run pef -- signal` : chaque règle `inferred` non approuvée génère une issue `rules-to-validate`. Si une UserStory de rétro-documentation couvre ce périmètre, coche sa ligne « B3 — Règles métier » avec les IDs produits. Rappelle que la validation métier des `inferred` conditionne leur approbation.
