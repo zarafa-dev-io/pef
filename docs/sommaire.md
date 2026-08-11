@@ -10,12 +10,6 @@ Les méthodes changent. Les outils changent. Les IA changent. Les Product Assets
 
 [Les cinq concepts](README.md#les-cinq-concepts) · [État du MVP](README.md#état-du-mvp) · [Par où commencer](README.md#par-où-commencer) · [Lire cette documentation confortablement](README.md#lire-cette-documentation-confortablement)
 
-### [Sommaire de la documentation](sommaire.md)
-
-Page générée par node docs/build-sommaire.mjs et régénérée automatiquement à chaque évolution de docs/ (workflow docs-sommaire). Ne pas l'éditer à la main.
-
-[Prise en main](sommaire.md#prise-en-main) · [Comprendre](sommaire.md#comprendre) · [Tutoriels](sommaire.md#tutoriels) · [Référence](sommaire.md#référence) · [Documents fondateurs](sommaire.md#documents-fondateurs)
-
 ### [Démarrer pas à pas](getting-started.md)
 
 Ce guide s'adresse à un Product Owner (ou QA, BA…) qui n'a jamais utilisé PEF. À la fin, vous aurez un dépôt PEF fonctionnel, vous saurez lire et créer un Asset, le valider, et lancer votre première génération IA.

@@ -62,7 +62,8 @@ for (const line of sidebar.split(/\r?\n/)) {
   const page = line.match(/^\s+-\s+\[(.+?)\]\((.+?)\)/);
   if (group) { current = { title: group[1], pages: [] }; groups.push(current); }
   else if (page && current) {
-    current.pages.push({ label: page[1], path: page[2] === '/' ? 'README.md' : page[2] });
+    const pagePath = page[2] === '/' ? 'README.md' : page[2];
+    if (pagePath !== OUT) current.pages.push({ label: page[1], path: pagePath });
   }
 }
 
