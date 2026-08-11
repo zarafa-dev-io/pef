@@ -1,0 +1,23 @@
+# PEF Processor contract (EF-16). Complète la chaîne rétro-doc (EF-27) :
+# sur un existant sans Specification ni AC, on protège le comportement
+# observé par des tests de caractérisation avant toute évolution.
+processor: DraftRegressionTestPlan
+version: "1.0"
+description: >-
+  Construit un plan de tests de caractérisation du comportement existant
+  depuis la Documentation reconstruite et les BusinessRules extraites du
+  code (et le code lui-même si le workspace l'expose) : le TestPlan
+  verifies la Documentation fonctionnelle, chaque TestCase fige une règle
+  ou un flux observé.
+inputs:
+  - Documentation   # docType: Functional (et Technical en appui)
+  - BusinessRule
+outputs:
+  - TestPlan
+  - TestCase
+activities:
+  - Préparer la recette
+  - Documenter et embarquer
+implementation:
+  type: copilot-prompt
+  path: .github/prompts/draft-regression-test-plan.prompt.md

@@ -48,8 +48,9 @@ Prérequis à vérifier d'abord (DEC-006) : le code est **cloné et ouvert dans 
 | B2. Doc technique | `/reconstruct-technical-doc` | factuel, référencé (`codeRefs`), incohérences signalées |
 | B3. Règles métier | `/extract-business-rules` | `observed` / `inferred` — les `inferred` exigent une validation métier (issues `rules-to-validate`) |
 | B4. Doc fonctionnelle | `/reconstruct-functional-doc` | le « quoi » métier, l'`inferred` marqué « sous réserve » |
-| B5. Amont | `/draft-vision` nourrie par la doc fonctionnelle reconstruite | la vision se formule mieux une fois la réalité du code connue |
-| B6. Onboarding | `/draft-onboarding-guide` | quand le graphe est assez riche |
+| B5. Protéger l'existant | `/draft-regression-test-plan` | tests de caractérisation : figer le comportement observé avant toute évolution |
+| B6. Amont | `/draft-vision` nourrie par la doc fonctionnelle reconstruite | la vision se formule mieux une fois la réalité du code connue |
+| B7. Onboarding | `/draft-onboarding-guide` | quand le graphe est assez riche |
 
 Ensuite, le backlog se construit comme au chemin A (A3-A6), adossé à la connaissance reconstruite.
 

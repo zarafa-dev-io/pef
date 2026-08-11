@@ -37,7 +37,7 @@ Deux familles de sorties :
 - **des Assets** — toujours créés en `status: Generated` avec leur provenance ;
 - **`Report`** — un rapport en chat, *aucun fichier créé* : pour les analyses où la décision doit rester humaine (refinement, cérémonies).
 
-## Les 20 Processors livrés
+## Les 21 Processors livrés
 
 ### Démarrage
 
@@ -83,6 +83,7 @@ Deux familles de sorties :
 | `/refresh-documentation` | Documentation → **Report** | Écarts : Assets modifiés depuis l'approbation, sections périmées, règles disparues du code |
 | `/enrich-documentation` | WorkItem validé + Docs périmées → Documentation | L'étape 2 d'EF-31 : réécrit les sections touchées, rafraîchit `coveredVersions` — déclenchée par l'humain, jamais par la CI |
 | `/draft-onboarding-guide` | le graphe d'Assets → Documentation Onboarding | Parcours de lecture ordonné et commenté, par profil métier/technique |
+| `/draft-regression-test-plan` | Doc reconstruite + BR (+ code) → TestPlan + TestCases | **Tests de caractérisation** : fige le comportement observé d'un existant sans spec ni AC — le TP `verifies` la doc fonctionnelle, chaque TC `verifies` la règle qu'il fige ; les comportements suspects sont signalés en candidats bugs, jamais « corrigés » dans le test |
 
 Prérequis rétro-doc (DEC-006) : le code est ouvert dans le **même workspace VS Code** que le repo PEF ; les `codeRefs` sont préfixés du nom du dossier repo (`clientis-app/src/clients/rules.ts:18-42`).
 

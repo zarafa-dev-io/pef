@@ -70,6 +70,18 @@ Déroulez les trois Processors dans l'ordre :
                                  "comment" technique + les règles
 ```
 
+Puis **protégez l'existant avant d'y toucher** :
+
+```
+/draft-regression-test-plan    → TestPlan + TestCases de caractérisation :
+                                 chaque règle et chaque flux observé est figé
+                                 par un test rejouable. Un comportement suspect
+                                 est figé TEL QUEL et signalé comme candidat
+                                 /qualify-bug — jamais corrigé en douce.
+```
+
+Le TestPlan `verifies` la documentation fonctionnelle, chaque TestCase `verifies` la règle qu'il fige ; les tests issus de règles `inferred` sont marqués « à confirmer » et tombent si la validation métier infirme la règle.
+
 Le niveau `observed`/`inferred` est le garde-fou central de la rétro-doc : une règle **déduite** peut être fausse (ou documenter un bug !). Chaque `inferred` non validée génère une issue `rules-to-validate`, et les docs la citent « sous réserve de validation métier ». Le code qui contredit un Asset existant est **signalé, jamais lissé**.
 
 Ce flux est agnostique au langage : il se déroule à l'identique sur du TypeScript ou sur une chaîne COBOL/JCL — c'est l'objet du contre-pilote mainframe prévu en fin de MVP.
