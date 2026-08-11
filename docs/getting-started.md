@@ -24,15 +24,55 @@ Ouvrez un terminal (dans VS Code : menu *Terminal → New Terminal*) et lancez l
 
 ## 3. Instancier le template
 
-Au MVP, on instancie **par copie** (la commande `pef init` viendra plus tard) :
+Au MVP, on instancie **par copie** (la commande `pef init` viendra plus tard). Seul le répertoire `template/` du monorepo est nécessaire : il est autonome (schémas, moteur de validation, prompts Copilot, CI, exemple).
+
+**Cas 1 — vous avez déjà le monorepo `pef` en local :**
 
 ```bash
 cp -r template/ mon-projet-pef/
+```
+
+**Cas 2 — vous partez d'un poste vierge** (il faut un compte GitHub ayant accès à `zarafa-dev-io/pef`) : un clone « sparse » ne télécharge que `template/` :
+
+```bash
+git clone --depth 1 --filter=blob:none --sparse https://github.com/zarafa-dev-io/pef.git pef-tmp
+git -C pef-tmp sparse-checkout set template
+cp -r pef-tmp/template/. mon-projet-pef/     # le "/." inclut le répertoire caché .github
+rm -rf pef-tmp
+```
+
+> Sous Windows (PowerShell), remplacez la copie par `robocopy pef-tmp\template mon-projet-pef /E` (copie aussi `.github`), et la suppression par `Remove-Item -Recurse -Force pef-tmp`.
+
+Puis, dans les deux cas :
+
+```bash
 cd mon-projet-pef
 git init
 git add -A
-git commit -m "Initialisation PEF"
+git commit -m "Initialisation PEF (template pefVersion 0.1)"
 ```
+
+Pour un dépôt distant avec CI et signalements (recommandé) :
+
+```bash
+gh repo create <org>/mon-projet-pef --private --source . --remote origin --push
+for l in pef review-required coverage-gap broken-ref stale-doc doc-enrichment rules-to-validate; do
+  gh label create "$l" --color 1D76DB --description "PEF signal (EF-33)"
+done
+```
+
+**Si votre produit a déjà du code** (rétro-documentation) : le code reste dans son propre dépôt, relié par un workspace VS Code multi-root (DEC-006). Créez un fichier `mon-produit.code-workspace` à côté des deux dépôts :
+
+```json
+{
+  "folders": [
+    { "path": "mon-projet-pef" },
+    { "path": "mon-code-existant" }
+  ]
+}
+```
+
+et ouvrez ce fichier dans VS Code (*Fichier → Ouvrir l'espace de travail à partir d'un fichier*).
 
 Ce que vous venez de copier :
 
