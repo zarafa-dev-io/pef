@@ -60,10 +60,29 @@ export function buildSummary(assets: ParsedAsset[], gaps: Gap[]): string {
     out.push(`## ${section.title}`, '');
     const isWorkItem = section.types.includes('WorkItem');
     const isDoc = section.types.includes('Documentation');
+    if (isDoc) {
+      // Fonctionnelle / technique / onboarding se lisent mal mélangées :
+      // une sous-section par docType (le rangement disque suit la même logique).
+      const DOC_TYPES: [string, string][] = [
+        ['Functional', 'Fonctionnelle'],
+        ['Technical', 'Technique'],
+        ['Onboarding', 'Onboarding'],
+      ];
+      for (const [docType, label] of DOC_TYPES) {
+        const docs = rows.filter((a) => a.fm!.docType === docType);
+        if (docs.length === 0) continue;
+        out.push(`### ${label}`, '', '| ID | Titre | Statut | Version | État |', '|---|---|---|---|---|');
+        for (const asset of docs) {
+          const fm = asset.fm!;
+          const state = staleDocs.has(String(fm.id)) ? '⚠ périmée (`stale-doc`)' : 'à jour';
+          out.push(`| [${fm.id}](${asset.rel}) | ${cell(fm.title)} | ${cell(fm.status)} | ${cell(fm.version)} | ${state} |`);
+        }
+        out.push('');
+      }
+      continue;
+    }
     if (isWorkItem) {
       out.push('| ID | Titre | Type | Priorité | Contenu | Réalisation |', '|---|---|---|---|---|---|');
-    } else if (isDoc) {
-      out.push('| ID | Titre | Type | Statut | Version | État |', '|---|---|---|---|---|---|');
     } else {
       out.push('| ID | Titre | Statut | Version |', '|---|---|---|---|');
     }
@@ -72,9 +91,6 @@ export function buildSummary(assets: ParsedAsset[], gaps: Gap[]): string {
       const link = `[${fm.id}](${asset.rel})`;
       if (isWorkItem) {
         out.push(`| ${link} | ${cell(fm.title)} | ${cell(fm.workItemType)} | ${cell(fm.priority)} | ${cell(fm.status)} | ${cell(fm.workflowState)} |`);
-      } else if (isDoc) {
-        const state = staleDocs.has(String(fm.id)) ? '⚠ périmée (`stale-doc`)' : 'à jour';
-        out.push(`| ${link} | ${cell(fm.title)} | ${cell(fm.docType)} | ${cell(fm.status)} | ${cell(fm.version)} | ${state} |`);
       } else {
         out.push(`| ${link} | ${cell(fm.title)} | ${cell(fm.status)} | ${cell(fm.version)} |`);
       }

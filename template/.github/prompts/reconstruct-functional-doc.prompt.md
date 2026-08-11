@@ -22,7 +22,7 @@ Traduis le « comment » technique en « quoi » métier :
 
 ## Sorties
 
-`product/documentation/DOC-<nnn>-<slug>.doc.md` — `docType: Functional`, `status: Generated`, `documents:` listant la Documentation technique source et les BusinessRules citées, premier numéro libre, bloc `ai:` (`processor: ReconstructFunctionalDoc`, `processorVersion: "1.0"`, `reviewed: false`).
+`product/documentation/fonctionnelle/DOC-<nnn>-<slug>.doc.md` — `docType: Functional`, `status: Generated`, `documents:` listant la Documentation technique source et les BusinessRules citées, premier numéro libre, bloc `ai:` (`processor: ReconstructFunctionalDoc`, `processorVersion: "1.0"`, `reviewed: false`).
 
 À l'approbation (revue humaine), le relecteur renseignera `coveredVersions` avec la version courante de chaque Asset documenté (exigé par PEF012).
 

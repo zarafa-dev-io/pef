@@ -25,7 +25,7 @@ Règles d'honnêteté : documente ce que le code **fait**, pas ce qu'il devrait 
 
 ## Sorties
 
-`product/documentation/DOC-<nnn>-<slug>.doc.md` — `assetType: Documentation`, `docType: Technical`, `status: Generated`, `codeRefs` renseignés, premier numéro libre, bloc `ai:` (`processor: ReconstructTechnicalDoc`, `processorVersion: "1.0"`, `reviewed: false`). Ne renseigne `documents:` que si des Assets existent déjà pour ce périmètre.
+`product/documentation/technique/DOC-<nnn>-<slug>.doc.md` — `assetType: Documentation`, `docType: Technical`, `status: Generated`, `codeRefs` renseignés, premier numéro libre, bloc `ai:` (`processor: ReconstructTechnicalDoc`, `processorVersion: "1.0"`, `reviewed: false`). Ne renseigne `documents:` que si des Assets existent déjà pour ce périmètre.
 
 ## Vérification finale
 

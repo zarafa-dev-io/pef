@@ -23,7 +23,7 @@ Un **parcours de lecture ordonné et commenté** pour un nouvel arrivant, par pr
 
 ## Sorties
 
-`product/documentation/DOC-<nnn>-<slug>.doc.md` — `docType: Onboarding`, `status: Generated`, `documents:` listant les Assets jalons du parcours, premier numéro libre, bloc `ai:` (`processor: DraftOnboardingGuide`, `processorVersion: "1.0"`, `reviewed: false`). Le relecteur renseignera `coveredVersions` à l'approbation (PEF012).
+`product/documentation/onboarding/DOC-<nnn>-<slug>.doc.md` — `docType: Onboarding`, `status: Generated`, `documents:` listant les Assets jalons du parcours, premier numéro libre, bloc `ai:` (`processor: DraftOnboardingGuide`, `processorVersion: "1.0"`, `reviewed: false`). Le relecteur renseignera `coveredVersions` à l'approbation (PEF012).
 
 ## Vérification finale
 

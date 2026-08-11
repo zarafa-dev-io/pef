@@ -51,7 +51,7 @@ Toute clé inconnue est **rejetée** (PEF002) : c'est ce qui attrape les fautes 
 | TestCase | `TC-` | `.tc.md` | répertoire de son TestPlan | Un cas exécutable |
 | Decision | `DEC-` | `.dec.md` | `product/decisions/` | Un choix structurant, tracé |
 | Release | `REL-` | `.rel.md` | `product/releases/` | Une livraison, en langage métier |
-| Documentation | `DOC-` | `.doc.md` | `product/documentation/` | Fonctionnelle, technique ou onboarding ; `documents` ses Assets |
+| Documentation | `DOC-` | `.doc.md` | `product/documentation/<type>/` (`fonctionnelle` \| `technique` \| `onboarding`) | Le `docType` du front matter fait foi ; le sous-répertoire le rend visible d'un coup d'œil |
 
 **Nom de fichier** : `<ID>-<slug>.<suffixe>.md` — le slug en minuscules `a-z0-9-`.
 

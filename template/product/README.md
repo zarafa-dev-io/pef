@@ -87,10 +87,17 @@
 
 ## Documentation
 
-| ID | Titre | Type | Statut | Version | État |
-|---|---|---|---|---|---|
-| [DOC-001](documentation/DOC-001-gestion-clients-fonctionnelle.doc.md) | Documentation fonctionnelle — gestion des fiches clients | Functional | Approved | 1.0.0 | à jour |
-| [DOC-002](documentation/DOC-002-parcours-onboarding.doc.md) | Parcours d'onboarding — découvrir Clientis par les Assets | Onboarding | Approved | 1.0.0 | à jour |
+### Fonctionnelle
+
+| ID | Titre | Statut | Version | État |
+|---|---|---|---|---|
+| [DOC-001](documentation/fonctionnelle/DOC-001-gestion-clients-fonctionnelle.doc.md) | Documentation fonctionnelle — gestion des fiches clients | Approved | 1.0.0 | à jour |
+
+### Onboarding
+
+| ID | Titre | Statut | Version | État |
+|---|---|---|---|---|
+| [DOC-002](documentation/onboarding/DOC-002-parcours-onboarding.doc.md) | Parcours d'onboarding — découvrir Clientis par les Assets | Approved | 1.0.0 | à jour |
 
 ---
 
