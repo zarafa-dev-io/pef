@@ -114,17 +114,20 @@ Chaque étape laisse une trace dans Git : c'est l'auditabilité demandée par la
 
 Ces invariants sont rappelés à l'IA par les instructions du repo (`.github/copilot-instructions.md` et `.github/instructions/*.instructions.md`, ciblées par suffixe de fichier).
 
-## Personnaliser la forme des Assets : les templates
+## Personnaliser vos Assets : templates (forme) et guidelines (contenu)
 
-Trois couches, trois responsabilités (DEC-009) :
+Quatre couches, deux propriétaires (DEC-009) :
 
 | Couche | Où | Qui la possède |
 |---|---|---|
 | **Le contrat** (front matter, relations, statuts) | `schemas/0.1/asset.schema.json` | le framework |
-| **La forme** (structure du corps, sections, tournures) | `templates/*.template.md` — un par assetType | **votre projet** |
+| **La forme** (structure du corps, sections) | `templates/*.template.md` — un par assetType | **votre projet** |
+| **Le contenu** (ton, vocabulaire, niveau de détail, exigences maison) | `guidelines/redaction.md` + `guidelines/<suffixe>.md` optionnels | **votre projet** |
 | **Le comportement** (comment l'IA génère) | `.github/prompts/*.prompt.md` | le framework |
 
-Tout Processor (et tout humain outillé) **part du template du projet** pour créer un Asset — c'est la skill `pef-asset-authoring` (`.github/skills/`) qui l'impose aux IA : lire `templates/<suffixe>.template.md`, remplacer les placeholders, conserver toutes les sections. Votre organisation veut une section « Impacts réglementaires » dans chaque spec, ou un gabarit de bug maison ? **Éditez le template, pas les prompts** : toutes les générations suivront, et `update-framework` n'écrasera jamais vos templates (ils appartiennent au projet, comme `product/`).
+Tout Processor (et tout humain outillé) crée un Asset **selon la forme et le contenu du projet** — c'est la skill `pef-asset-authoring` (`.github/skills/`) qui l'impose aux IA : partir de `templates/<suffixe>.template.md` (toutes sections conservées), rédiger selon `guidelines/redaction.md` et la guideline du type si elle existe (elles priment sur les habitudes du modèle).
+
+Votre organisation veut une section « Impacts réglementaires » dans chaque spec ? **Éditez le template.** Un vocabulaire imposé, des montants toujours avec devise, des sources réglementaires citées ? **Éditez la guideline.** Jamais les prompts : les 21 Processors suivent automatiquement, et `update-framework` n'écrase ni vos templates ni vos guidelines (propriété du projet, comme `product/`).
 
 ## Écrire votre propre Processor
 

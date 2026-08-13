@@ -4,12 +4,13 @@ Un modèle par assetType (`spec.template.md`, `us.template.md`, …) : la **form
 
 **Ces templates appartiennent à votre projet** : personnalisez-les (sections, tournures, mentions obligatoires de votre organisation) — les générations suivront votre forme sans toucher aux prompts. `update-framework` ne les écrase **pas** : vos personnalisations survivent aux mises à jour du framework.
 
-Trois couches, trois responsabilités :
+Quatre couches, deux propriétaires :
 
 | Couche | Fichier | Qui la possède |
 |---|---|---|
 | Le contrat (front matter) | `schemas/0.1/asset.schema.json` | le framework |
-| La forme (corps du document) | `templates/*.template.md` | **votre projet** |
+| La forme (structure du corps) | `templates/*.template.md` | **votre projet** |
+| Le contenu (règles de rédaction) | `guidelines/` | **votre projet** |
 | Le comportement (génération) | `.github/prompts/*.prompt.md` | le framework |
 
 Règle d'or en personnalisant : ne touchez pas aux clés du front matter (le schéma fait foi) — tout le reste est à vous.

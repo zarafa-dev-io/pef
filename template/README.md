@@ -14,7 +14,8 @@ template/
 │   ├── instructions/                # instructions ciblées par assetType (applyTo sur les suffixes)
 │   ├── prompts/                     # prompt files des Processors (/generate-…)
 │   └── workflows/pef-validate.yml   # CI : validate + coverage sur chaque PR
-├── templates/            # la FORME de vos Assets, un template par type — personnalisables, jamais écrasés
+├── templates/            # la FORME de vos Assets (un template par type) — à vous, jamais écrasés
+├── guidelines/           # le CONTENU : règles de rédaction globales et par type — à vous, jamais écrasées
 ├── viewer/               # explorateur local du produit : carte cliquable, IDs navigables (npx serve . → /viewer/)
 └── product/              # les Product Assets, avec un exemple complet (mini-CRM « Clientis »)
 ```

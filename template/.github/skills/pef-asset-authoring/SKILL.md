@@ -5,14 +5,20 @@ description: Création et modification de Product Assets PEF (fichiers .md de pr
 
 # Rédiger un Product Asset PEF
 
-## La règle centrale : partir du template du projet
+## La règle centrale : la forme ET le contenu appartiennent au projet
 
-Pour **tout** nouvel Asset, la structure de départ est `templates/<suffixe>.template.md` (ex. `templates/spec.template.md` pour une Specification, `templates/us.template.md` pour une UserStory). Ces templates appartiennent **au projet** — l'organisation les a peut-être personnalisés : sections ajoutées, tournures imposées, champs commentés. C'est leur forme qui fait foi, pas celle que tu connais par défaut.
+Pour **tout** nouvel Asset (et toute modification substantielle), deux sources font foi — celles du projet, pas tes habitudes :
 
-1. Lis le template correspondant au suffixe cible.
+- **La forme** : `templates/<suffixe>.template.md` (ex. `templates/spec.template.md`) — la structure de départ, sections comprises.
+- **Le contenu** : `guidelines/redaction.md` (consignes globales : ton, vocabulaire, niveau de détail, exigences transverses) **plus** `guidelines/<suffixe>.md` s'il existe (consignes propres au type). Ces règles s'appliquent à ce que tu écris *dans* les sections.
+
+Déroulé :
+
+1. Lis le template du suffixe cible, puis `guidelines/redaction.md`, puis `guidelines/<suffixe>.md` s'il existe.
 2. Remplace les placeholders (`XXX`, `<…>`) — ID au premier numéro libre du préfixe, jamais réutilisé.
 3. Conserve **toutes** les sections du template (une section sans objet se remplit de « Sans objet » plutôt que d'être supprimée) ; les commentaires `<!-- … -->` sont des consignes à suivre puis à retirer.
-4. Complète les relations avec des IDs **existants** uniquement.
+4. Rédige chaque section en appliquant les guidelines — elles priment sur toute autre habitude de style.
+5. Complète les relations avec des IDs **existants** uniquement.
 
 ## Les invariants (rappel)
 

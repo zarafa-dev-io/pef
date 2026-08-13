@@ -17,8 +17,8 @@ import { fileURLToPath } from 'node:url';
 const TEMPLATE_REPO = process.env.PEF_TEMPLATE_REPO ?? 'https://github.com/zarafa-dev-io/pef.git';
 
 // La frontière de propriété : SEULS ces chemins appartiennent au framework.
-// product/, README.md et templates/ appartiennent au projet (les templates
-// sont la forme personnalisée des Assets) et ne sont jamais listés ici.
+// product/, README.md, templates/ (la forme des Assets) et guidelines/ (les
+// règles de contenu) appartiennent au projet et ne sont jamais listés ici.
 const FRAMEWORK_PATHS = [
   'schemas',
   'tools',
