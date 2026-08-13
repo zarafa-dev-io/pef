@@ -116,7 +116,7 @@ npm run pef -- summary
 
 Génère **`product/README.md`** en deux parties :
 
-1. **La vue par domaine fonctionnel** (la restitution de référence, DEC-008) : un domaine = un Epic, et sous lui tout ce que le graphe y rattache — US, bugs, exigences, règles, specs, critères, tests, documentation — avec la chaîne stratégique (« sert RM-001 → GOAL-001 ») et la **couverture propre au domaine** (`✔ complète` ou les trous). Les Assets métier sans Epic apparaissent en « Hors domaine ». C'est la vue qui raconte le produit ; elle est calculée depuis les relations, donc jamais désynchronisée.
+1. **La vue par domaine fonctionnel** (la restitution de référence, DEC-008) — ouverte par la **carte du produit** (diagramme Mermaid rendu nativement par GitHub : Vision → Objectifs → Roadmap → Domaines, chaque domaine coloré selon son état de réalisation avec son nombre d'Assets) — puis, pour chaque domaine : un domaine = un Epic, et sous lui tout ce que le graphe y rattache — US, bugs, exigences, règles, specs, critères, tests, documentation — avec la chaîne stratégique (« sert RM-001 → GOAL-001 ») et la **couverture propre au domaine** (`✔ complète` ou les trous). Les Assets métier sans Epic apparaissent en « Hors domaine ». C'est la vue qui raconte le produit ; elle est calculée depuis les relations, donc jamais désynchronisée.
 2. **L'inventaire par type** : la vue exhaustive « modèle » (vision → … → documentation), avec les colonnes utiles par famille (priorité et réalisation des WorkItems, état à jour/périmée des Documentations).
 
 GitHub l'affiche automatiquement en tête du répertoire `product/`.

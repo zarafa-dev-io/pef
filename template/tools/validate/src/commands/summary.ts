@@ -93,6 +93,8 @@ export function buildSummary(assets: ParsedAsset[], graph: AssetGraph, gaps: Gap
     .sort((a, b) =>
       (PRIORITY_ORDER[String(a.fm!.priority)] ?? 9) - (PRIORITY_ORDER[String(b.fm!.priority)] ?? 9) || byId(a, b));
 
+  // Fermetures aval calculées une fois : elles servent la carte puis les blocs.
+  const clusters = new Map<string, ParsedAsset[]>();
   const claimed = new Set<string>();
   for (const epic of epics) {
     const epicId = String(epic.fm!.id);
@@ -102,7 +104,62 @@ export function buildSummary(assets: ParsedAsset[], graph: AssetGraph, gaps: Gap
       .filter((a): a is ParsedAsset => Boolean(a) && domainType(a!) !== null)
       .sort((a, b) =>
         DOMAIN_TYPE_ORDER.indexOf(domainType(a) as never) - DOMAIN_TYPE_ORDER.indexOf(domainType(b) as never) || byId(a, b));
+    clusters.set(epicId, cluster);
     for (const member of cluster) claimed.add(String(member.fm!.id));
+  }
+
+  // ---- La carte du produit (Mermaid, rendue nativement par GitHub) ----------
+  const roadmapElements = valid.filter((a) => a.fm!.assetType === 'Roadmap').sort(byId);
+  if (vision || goals.length > 0 || epics.length > 0) {
+    const nodeId = (id: string) => id.replace(/-/g, '_');
+    const label = (id: string, title: unknown, extra = '') => {
+      const text = String(title ?? '').replace(/"/g, "'");
+      const short = text.length > 42 ? `${text.slice(0, 42).replace(/\s+\S*$/, '')}…` : text;
+      return `${nodeId(id)}["${id}${short ? ` · ${short}` : ''}${extra}"]`;
+    };
+    const m: string[] = ['```mermaid', 'flowchart LR'];
+    if (vision) m.push(`  ${label(String(vision.fm!.id), vision.fm!.title)}`);
+    for (const goal of goals) m.push(`  ${label(String(goal.fm!.id), goal.fm!.title)}`);
+    for (const rm of roadmapElements) m.push(`  ${label(String(rm.fm!.id), rm.fm!.title)}`);
+    for (const epic of epics) {
+      const count = clusters.get(String(epic.fm!.id))!.length;
+      m.push(`  ${label(String(epic.fm!.id), epic.fm!.title, `<br/>${epic.fm!.workflowState} · ${count} Asset(s)`)}`);
+    }
+    const edge = (from: string, to: string) => m.push(`  ${nodeId(from)} --> ${nodeId(to)}`);
+    for (const goal of goals) {
+      for (const target of (Array.isArray(goal.fm!.refines) ? goal.fm!.refines : [])) {
+        if (assetById.get(target)?.fm?.assetType === 'Vision') edge(target, String(goal.fm!.id));
+      }
+    }
+    for (const rm of roadmapElements) {
+      for (const target of (Array.isArray(rm.fm!.satisfies) ? rm.fm!.satisfies : [])) {
+        if (assetById.get(target)?.fm?.assetType === 'Goal') edge(target, String(rm.fm!.id));
+      }
+    }
+    for (const epic of epics) {
+      for (const target of (Array.isArray(epic.fm!.satisfies) ? epic.fm!.satisfies : [])) {
+        const targetType = assetById.get(target)?.fm?.assetType;
+        if (targetType === 'Roadmap' || targetType === 'Goal') edge(target, String(epic.fm!.id));
+      }
+    }
+    m.push('  classDef done fill:#e6f4ea,stroke:#1F8A5B,color:#131519');
+    m.push('  classDef wip fill:#e9edfc,stroke:#2743D9,color:#131519');
+    m.push('  classDef todo fill:#efefea,stroke:#8a9099,color:#565b63');
+    const byState = (state: string) => epics
+      .filter((e) => e.fm!.workflowState === state)
+      .map((e) => nodeId(String(e.fm!.id))).join(',');
+    if (byState('Validated')) m.push(`  class ${byState('Validated')} done`);
+    if (byState('InProgress')) m.push(`  class ${byState('InProgress')} wip`);
+    const rest = epics.filter((e) => e.fm!.workflowState === 'Drafting' || e.fm!.workflowState === 'Todo')
+      .map((e) => nodeId(String(e.fm!.id))).join(',');
+    if (rest) m.push(`  class ${rest} todo`);
+    m.push('```');
+    out.push(...m, '');
+  }
+
+  for (const epic of epics) {
+    const epicId = String(epic.fm!.id);
+    const cluster = clusters.get(epicId)!;
 
     // « sert RM-001 → GOAL-001 » : la chaîne stratégique de l'Epic
     const serves = (Array.isArray(epic.fm!.satisfies) ? epic.fm!.satisfies : [])

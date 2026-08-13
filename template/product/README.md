@@ -8,6 +8,25 @@
 
 *Cap produit — [VIS-001](vision/VIS-001-vision-produit.vis.md) Vision produit — Clientis, le référentiel clients des TPE · objectifs : [GOAL-001](goals/GOAL-001-referentiel-fiable.goal.md).*
 
+```mermaid
+flowchart LR
+  VIS_001["VIS-001 · Vision produit — Clientis, le référentiel…"]
+  GOAL_001["GOAL-001 · Un référentiel clients fiable et sans…"]
+  RM_001["RM-001 · Élément de roadmap — Socle référentiel…"]
+  RM_002["RM-002 · Élément de roadmap — Fiabilité des…"]
+  RM_003["RM-003 · Élément de roadmap — Exploitation (T3…"]
+  EPIC_001["EPIC-001 · Gestion des fiches clients<br/>InProgress · 14 Asset(s)"]
+  VIS_001 --> GOAL_001
+  GOAL_001 --> RM_001
+  GOAL_001 --> RM_002
+  GOAL_001 --> RM_003
+  RM_001 --> EPIC_001
+  classDef done fill:#e6f4ea,stroke:#1F8A5B,color:#131519
+  classDef wip fill:#e9edfc,stroke:#2743D9,color:#131519
+  classDef todo fill:#efefea,stroke:#8a9099,color:#565b63
+  class EPIC_001 wip
+```
+
 ### Gestion des fiches clients ([EPIC-001](backlog/EPIC-001-gestion-des-clients.epic.md))
 
 *Must · réalisation : InProgress · sert RM-001 → GOAL-001*
