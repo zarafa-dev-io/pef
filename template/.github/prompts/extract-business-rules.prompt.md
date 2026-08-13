@@ -1,11 +1,11 @@
 ---
 mode: agent
-description: 'PEF ExtractBusinessRules v1.0 — extrait les règles métier du code (observed/inferred)'
+description: 'PEF ExtractBusinessRules v1.1 — extrait les règles métier du code (observed/inferred)'
 ---
 
 # ExtractBusinessRules
 
-Tu exécutes le Processor PEF **ExtractBusinessRules v1.0** (contrat : `processors/extract-business-rules.yaml`).
+Tu exécutes le Processor PEF **ExtractBusinessRules v1.1** (contrat : `processors/extract-business-rules.yaml`).
 
 ## Entrées
 
@@ -22,7 +22,9 @@ Règles d'honnêteté : en cas de doute, `inferred` ; si le code contredit une B
 
 ## Sorties
 
-`product/requirements/BR-<nnn>-<slug>.br.md` — `status: Generated`, `certainty` renseigné, `codeRefs` au format `<repo>/<chemin>[:<lignes>]` pointant la règle, premier numéro libre, bloc `ai:` (`processor: ExtractBusinessRules`, `processorVersion: "1.0"`, `reviewed: false`).
+`product/requirements/BR-<nnn>-<slug>.br.md` — `status: Generated`, `certainty` renseigné, `codeRefs` au format `<repo>/<chemin>[:<lignes>]` pointant la règle, premier numéro libre, bloc `ai:` (`processor: ExtractBusinessRules`, `processorVersion: "1.1"`, `reviewed: false`).
+
+**Rattachement au domaine** : si un Epic de domaine couvre ce périmètre (plan StartProject, DEC-008), chaque règle porte `refines: [<EPIC-ID>]` — c'est ce qui la fait apparaître dans la vue par domaine de `pef summary` au lieu de « Hors domaine ».
 
 ## Vérification finale
 

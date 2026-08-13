@@ -86,7 +86,9 @@ Le niveau `observed`/`inferred` est le garde-fou central de la rétro-doc : une 
 
 Ce flux est agnostique au langage : il se déroule à l'identique sur du TypeScript ou sur une chaîne COBOL/JCL — c'est l'objet du contre-pilote mainframe prévu en fin de MVP.
 
-**Sur un gros système, la rétro-doc se mène en plusieurs sessions** : `/start-project` commence par un inventaire et découpe le code en périmètres, puis crée le plan **en backlog** — un Epic « Rétro-documentation » et une UserStory par périmètre, chacune portant sa checklist d'avancement (B2 doc technique → B5 tests). Le « reste à faire » n'est pas un fichier à part : c'est le tableau Backlog de `pef summary`, tenu à jour par la CI. À chaque session, `/start-project` détecte le plan et propose de reprendre au périmètre suivant.
+**Sur un gros système, la rétro-doc se mène en plusieurs sessions** : `/start-project` commence par un inventaire et découpe le code en **périmètres = domaines fonctionnels**, puis crée le plan **en backlog** — un Epic par domaine (nom métier : « Facturation ») et sous chacun une UserStory « Rétro-documenter … » portant sa checklist d'avancement (B2 doc technique → B5 tests). Le « reste à faire » n'est pas un fichier à part : c'est `pef summary`, tenu à jour par la CI. À chaque session, `/start-project` détecte le plan et propose de reprendre au domaine suivant.
+
+Et la production se **rattache au domaine** (DEC-008) : les règles extraites `refines` l'Epic, les documentations le `documents` — la vue par domaine du sommaire se remplit au fil de la rétro-doc, exactement comme sur un projet né de zéro. Un Asset qui apparaît « Hors domaine » est un rattachement oublié.
 
 ## 5. Le parcours d'onboarding
 

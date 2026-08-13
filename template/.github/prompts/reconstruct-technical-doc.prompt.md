@@ -1,11 +1,11 @@
 ---
 mode: agent
-description: 'PEF ReconstructTechnicalDoc v1.0 — reconstruit la doc technique depuis le code'
+description: 'PEF ReconstructTechnicalDoc v1.1 — reconstruit la doc technique depuis le code'
 ---
 
 # ReconstructTechnicalDoc
 
-Tu exécutes le Processor PEF **ReconstructTechnicalDoc v1.0** (contrat : `processors/reconstruct-technical-doc.yaml`). Agnostique au langage : TypeScript comme COBOL/JCL/CICS.
+Tu exécutes le Processor PEF **ReconstructTechnicalDoc v1.1** (contrat : `processors/reconstruct-technical-doc.yaml`). Agnostique au langage : TypeScript comme COBOL/JCL/CICS.
 
 ## Entrées
 
@@ -25,7 +25,9 @@ Règles d'honnêteté : documente ce que le code **fait**, pas ce qu'il devrait 
 
 ## Sorties
 
-`product/documentation/technique/DOC-<nnn>-<slug>.doc.md` — `assetType: Documentation`, `docType: Technical`, `status: Generated`, `codeRefs` renseignés, premier numéro libre, bloc `ai:` (`processor: ReconstructTechnicalDoc`, `processorVersion: "1.0"`, `reviewed: false`). Ne renseigne `documents:` que si des Assets existent déjà pour ce périmètre.
+`product/documentation/technique/DOC-<nnn>-<slug>.doc.md` — `assetType: Documentation`, `docType: Technical`, `status: Generated`, `codeRefs` renseignés, premier numéro libre, bloc `ai:` (`processor: ReconstructTechnicalDoc`, `processorVersion: "1.1"`, `reviewed: false`).
+
+**Rattachement au domaine** : si un Epic de domaine couvre ce périmètre (plan StartProject, DEC-008), la Documentation porte `documents: [<EPIC-ID>]` — plus les Assets déjà existants du périmètre s'il y en a.
 
 ## Vérification finale
 

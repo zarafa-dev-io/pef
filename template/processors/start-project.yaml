@@ -3,7 +3,7 @@
 # le plan de rétro-documentation (Epic + UserStories de périmètre), qui porte
 # le reste à faire d'une rétro-doc menée en plusieurs sessions.
 processor: StartProject
-version: "1.1"
+version: "1.2"
 description: >-
   Guide le démarrage d'un projet PEF : diagnostic du dépôt, choix du chemin
   (produit nouveau, ou code existant à rétro-documenter), déroulé pas à pas

@@ -1,7 +1,7 @@
 # PEF Processor contract (EF-16, EF-27). Agnostique au langage : stacks
 # modernes (TypeScript, Go, Python…) comme legacy (COBOL/JCL/CICS/DB2).
 processor: ReconstructTechnicalDoc
-version: "1.0"
+version: "1.1"
 description: >-
   Reconstruit une Documentation technique depuis un code source existant :
   composants, points d'entrée, flux de données, dépendances, références code.

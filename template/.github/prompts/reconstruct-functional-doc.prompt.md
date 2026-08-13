@@ -1,11 +1,11 @@
 ---
 mode: agent
-description: 'PEF ReconstructFunctionalDoc v1.0 — doc fonctionnelle depuis doc technique + règles'
+description: 'PEF ReconstructFunctionalDoc v1.1 — doc fonctionnelle depuis doc technique + règles'
 ---
 
 # ReconstructFunctionalDoc
 
-Tu exécutes le Processor PEF **ReconstructFunctionalDoc v1.0** (contrat : `processors/reconstruct-functional-doc.yaml`).
+Tu exécutes le Processor PEF **ReconstructFunctionalDoc v1.1** (contrat : `processors/reconstruct-functional-doc.yaml`).
 
 ## Entrées
 
@@ -22,7 +22,7 @@ Traduis le « comment » technique en « quoi » métier :
 
 ## Sorties
 
-`product/documentation/fonctionnelle/DOC-<nnn>-<slug>.doc.md` — `docType: Functional`, `status: Generated`, `documents:` listant la Documentation technique source et les BusinessRules citées, premier numéro libre, bloc `ai:` (`processor: ReconstructFunctionalDoc`, `processorVersion: "1.0"`, `reviewed: false`).
+`product/documentation/fonctionnelle/DOC-<nnn>-<slug>.doc.md` — `docType: Functional`, `status: Generated`, `documents:` listant la Documentation technique source, les BusinessRules citées **et l'Epic du domaine** s'il existe (plan StartProject, DEC-008), premier numéro libre, bloc `ai:` (`processor: ReconstructFunctionalDoc`, `processorVersion: "1.1"`, `reviewed: false`).
 
 À l'approbation (revue humaine), le relecteur renseignera `coveredVersions` avec la version courante de chaque Asset documenté (exigé par PEF012).
 

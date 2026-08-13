@@ -1,11 +1,11 @@
 ---
 mode: agent
-description: 'PEF StartProject v1.1 — guide le démarrage d''un projet : de zéro ou depuis un code existant, en une ou plusieurs sessions'
+description: 'PEF StartProject v1.2 — guide le démarrage d''un projet : de zéro ou depuis un code existant, en une ou plusieurs sessions'
 ---
 
 # StartProject
 
-Tu exécutes le Processor PEF **StartProject v1.1** (contrat : `processors/start-project.yaml`). Tu es le point d'entrée d'un nouveau projet PEF : tu guides, tu enchaînes les Processors spécialisés, **tu ne crées aucun Asset toi-même** — à une seule exception près : le **plan de rétro-documentation** (un Epic et ses UserStories de périmètre, voir B0), qui est ton livrable propre. Tout le reste passe par le Processor dédié et par la revue humaine.
+Tu exécutes le Processor PEF **StartProject v1.2** (contrat : `processors/start-project.yaml`). Tu es le point d'entrée d'un nouveau projet PEF : tu guides, tu enchaînes les Processors spécialisés, **tu ne crées aucun Asset toi-même** — à une seule exception près : le **plan de rétro-documentation** (un Epic et ses UserStories de périmètre, voir B0), qui est ton livrable propre. Tout le reste passe par le Processor dédié et par la revue humaine.
 
 ## Étape 1 — Diagnostic
 
@@ -45,13 +45,13 @@ Prérequis à vérifier d'abord (DEC-006) : le code est **cloné et ouvert dans 
 
 ### B0 — L'inventaire et le plan (une seule fois)
 
-Sur un système de taille réelle, tout rétro-documenter en une session est illusoire. **Le reste à faire est du backlog, pas un fichier à part** :
+Sur un système de taille réelle, tout rétro-documenter en une session est illusoire. **Le reste à faire est du backlog, pas un fichier à part** — et les périmètres que tu découvres sont les **domaines fonctionnels** du produit : ils structurent la restitution (`pef summary`, vue par domaine — DEC-008).
 
 1. Cartographie le code à gros grain : modules, chaînes de traitement, points d'entrée — sans encore documenter.
-2. Propose un découpage en **périmètres** raisonnables (un module, une chaîne — une session de travail chacun) et fais valider le découpage et les priorités par l'utilisateur.
+2. Propose un découpage en **périmètres = domaines fonctionnels** raisonnables (un module, une chaîne — une session de travail chacun), nommés **métier** (« Facturation », pas « module billing-svc »), et fais valider découpage et priorités par l'utilisateur.
 3. Crée alors ton livrable propre, en `status: Generated` avec bloc `ai:` :
-   - un Epic **« Rétro-documentation de \<système\> »** (`workflowState: InProgress`, `priority: Must`) ;
-   - une UserStory **par périmètre** — « Rétro-documenter \<périmètre\> » — `refines` l'Epic, `priority` selon la criticité, `workflowState: Todo`, et dans le corps la **checklist d'avancement** :
+   - un Epic **par domaine fonctionnel**, au nom du domaine (« Facturation »), `priority` selon la criticité, `workflowState: InProgress` — c'est l'ancre du domaine : toute la connaissance rétro-documentée s'y rattachera, et les évolutions futures y trouveront leur place ;
+   - sous chaque Epic, une UserStory **« Rétro-documenter \<domaine\> »** — `refines` l'Epic, `workflowState: Todo`, portant dans son corps la **checklist d'avancement** :
 
 ```markdown
 ## Avancement
@@ -61,7 +61,9 @@ Sur un système de taille réelle, tout rétro-documenter en une session est ill
 - [ ] B5 — Tests de caractérisation (TP-…)
 ```
 
-Un petit projet = un seul périmètre, même mécanique. Le plan est visible en permanence : `pef summary` (tableau Backlog), et la CI le tient à jour.
+Un petit projet = un seul domaine, même mécanique. Le plan est visible en permanence : `pef summary` (un bloc par domaine, l'avancement dans le Backlog), et la CI le tient à jour.
+
+**Convention de rattachement au domaine** (elle fait vivre la vue par domaine) : dans les étapes B2-B5, les BusinessRules extraites `refines` l'Epic du domaine, et les Documentations le `documents` (en plus des Assets qu'elles couvrent). Le reste suit par le graphe : TP `verifies` la doc fonctionnelle, TC `verifies` les règles. Un Asset qui resterait « Hors domaine » dans le sommaire est un rattachement oublié.
 
 ### B2 → B5 — Une session, un périmètre
 
