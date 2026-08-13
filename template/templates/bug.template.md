@@ -10,6 +10,7 @@ priority: Must
 workflowState: Drafting
 impacts: []          # les Assets défaillants (SPEC-, BR-, AC-…)
 dependsOn: []        # le TestCase de non-régression (TC-)
+# externalRef: "PROJ-125"    # le bug Jira associé (clé ou URL, liste possible)
 ---
 
 # <symptôme>

@@ -70,7 +70,7 @@ export interface FrontMatter {
   certainty?: string;
   coveredVersions?: Record<string, string>;
   documents?: string[];
-  externalRef?: string;
+  externalRef?: string | string[];
   codeRefs?: string[];
   ai?: Record<string, unknown>;
   [key: string]: unknown;

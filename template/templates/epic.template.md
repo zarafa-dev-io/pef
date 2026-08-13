@@ -9,6 +9,8 @@ version: 1.0.0
 priority: Must
 workflowState: Drafting
 satisfies: [RM-XXX]
+# externalRef: "PROJ-123"                    # l'epic Jira associée (clé ou URL)
+# externalRef: ["PROJ-123", "https://…"]     # plusieurs références possibles
 ---
 
 # <thème livrable>

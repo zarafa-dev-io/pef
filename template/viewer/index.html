@@ -69,6 +69,14 @@
       ];
       if (fm.priority) parts.push(`priorité ${fm.priority}`);
       if (fm.workflowState) parts.push(`réalisation ${fm.workflowState}`);
+      if (fm.externalRef) {
+        const refs = fm.externalRef.replace(/^\[|\]$/g, '').split(',')
+          .map((r) => r.trim().replace(/^["']|["']$/g, '')).filter(Boolean)
+          .map((r) => /^https?:\/\//.test(r)
+            ? `<a href="${r}" target="_blank" rel="noopener">${r.replace(/^https?:\/\/(www\.)?/, '').split('/')[0]}</a>`
+            : `<code>${r}</code>`);
+        if (refs.length) parts.push(`réf. externe ${refs.join(' ')}`);
+      }
       const relations = RELATION_KEYS
         .filter((k) => fm[k])
         .map((k) => `${k} → ${(fm[k].match(new RegExp(ID_RE, 'g')) || []).map(linkId).join(', ')}`);

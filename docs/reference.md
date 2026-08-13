@@ -25,7 +25,7 @@ Champs **optionnels** (selon le type) :
 | `docType` | Documentation (obligatoire) | `Functional`, `Technical`, `Onboarding` |
 | `coveredVersions` | Documentation | la version de chaque Asset documenté au moment de l'approbation — **obligatoire en `Approved`** (PEF012), base de la détection de péremption `stale-doc` |
 | `certainty` | BusinessRule | pour une règle extraite du code : `observed` (lue telle quelle) ou `inferred` (déduite — validation métier requise avant `Approved`) |
-| `externalRef` | tous | lien libre vers l'outil d'exécution (URL, clé Jira) — non contrôlé |
+| `externalRef` | tous | référence(s) externe(s) : clé Jira ou URL, une ou plusieurs (`"PROJ-123"` ou `["PROJ-123", "https://…"]`) — non contrôlées, restituées dans le sommaire (Backlog) et le viewer |
 | `codeRefs` | Documentation, BusinessRule | chemins de code au format `<repo>/<chemin>[:<lignes>]` (DEC-006) — non contrôlés |
 | `ai` | tous | bloc de provenance IA (voir plus bas) |
 

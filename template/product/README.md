@@ -86,11 +86,11 @@ flowchart LR
 
 ### Backlog
 
-| ID | Titre | Type | Priorité | Contenu | Réalisation |
-|---|---|---|---|---|---|
-| [BUG-001](backlog/BUG-001-doublon-casse-email.bug.md) | Doublon créé quand l'email ne diffère que par la casse | Bug | Must | Approved | Validated |
-| [EPIC-001](backlog/EPIC-001-gestion-des-clients.epic.md) | Gestion des fiches clients | Epic | Must | Approved | InProgress |
-| [US-001](backlog/US-001-creer-un-client.us.md) | Créer une fiche client | UserStory | Must | Approved | Validated |
+| ID | Titre | Type | Priorité | Contenu | Réalisation | Réf. externe |
+|---|---|---|---|---|---|---|
+| [BUG-001](backlog/BUG-001-doublon-casse-email.bug.md) | Doublon créé quand l'email ne diffère que par la casse | Bug | Must | Approved | Validated | — |
+| [EPIC-001](backlog/EPIC-001-gestion-des-clients.epic.md) | Gestion des fiches clients | Epic | Must | Approved | InProgress | — |
+| [US-001](backlog/US-001-creer-un-client.us.md) | Créer une fiche client | UserStory | Must | Approved | Validated | `CLI-42` |
 
 ### Exigences et règles
 

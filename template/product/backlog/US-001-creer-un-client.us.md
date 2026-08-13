@@ -5,10 +5,11 @@ workItemType: UserStory
 id: US-001
 title: Créer une fiche client
 status: Approved
-version: 1.1.0
+version: 1.2.0
 priority: Must
 workflowState: Validated
 refines: [EPIC-001]
+externalRef: "CLI-42"
 ---
 
 # Créer une fiche client

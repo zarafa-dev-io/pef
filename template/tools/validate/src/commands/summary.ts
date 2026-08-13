@@ -34,6 +34,20 @@ const PRIORITY_ORDER: Record<string, number> = { Must: 0, Should: 1, Could: 2, W
 
 const cell = (value: unknown): string => String(value ?? '—').replace(/\|/g, '\\|');
 
+/** externalRef (EF-6) : clé(s) Jira en code, URL(s) en lien court. */
+const externalRefs = (value: unknown): string => {
+  const refs = Array.isArray(value) ? value : typeof value === 'string' ? [value] : [];
+  if (refs.length === 0) return '—';
+  return refs.map((ref) => {
+    const s = String(ref);
+    if (/^https?:\/\//.test(s)) {
+      const short = s.replace(/^https?:\/\/(www\.)?/, '').split('/')[0];
+      return `[${short}](${s})`;
+    }
+    return `\`${s.replace(/\|/g, '\\|')}\``;
+  }).join(' ');
+};
+
 const byId = (a: ParsedAsset, b: ParsedAsset): number => {
   const [pa, na] = String(a.fm!.id).split('-');
   const [pb, nb] = String(b.fm!.id).split('-');
@@ -262,7 +276,7 @@ export function buildSummary(assets: ParsedAsset[], graph: AssetGraph, gaps: Gap
       continue;
     }
     if (isWorkItem) {
-      out.push('| ID | Titre | Type | Priorité | Contenu | Réalisation |', '|---|---|---|---|---|---|');
+      out.push('| ID | Titre | Type | Priorité | Contenu | Réalisation | Réf. externe |', '|---|---|---|---|---|---|---|');
     } else {
       out.push('| ID | Titre | Statut | Version |', '|---|---|---|---|');
     }
@@ -270,7 +284,7 @@ export function buildSummary(assets: ParsedAsset[], graph: AssetGraph, gaps: Gap
       const fm = asset.fm!;
       const link = `[${fm.id}](${asset.rel})`;
       if (isWorkItem) {
-        out.push(`| ${link} | ${cell(fm.title)} | ${cell(fm.workItemType)} | ${cell(fm.priority)} | ${cell(fm.status)} | ${cell(fm.workflowState)} |`);
+        out.push(`| ${link} | ${cell(fm.title)} | ${cell(fm.workItemType)} | ${cell(fm.priority)} | ${cell(fm.status)} | ${cell(fm.workflowState)} | ${externalRefs(fm.externalRef)} |`);
       } else {
         out.push(`| ${link} | ${cell(fm.title)} | ${cell(fm.status)} | ${cell(fm.version)} |`);
       }

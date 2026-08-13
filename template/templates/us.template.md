@@ -9,6 +9,7 @@ version: 1.0.0
 priority: Must
 workflowState: Drafting
 refines: [EPIC-XXX]
+# externalRef: "PROJ-124"    # la story Jira associée (clé ou URL, liste possible)
 ---
 
 # <capacité utilisateur>

@@ -4,7 +4,7 @@ assetType: PRD
 id: PRD-001
 title: PEF MVP — PEF-PO complet, de la vision aux tests fonctionnels
 status: Draft
-version: 0.14.0
+version: 0.14.1
 refines: [MANIFESTO-001]
 ai:
   generated: true
@@ -98,7 +98,7 @@ Priorisation MoSCoW. *(M = Must, S = Should, C = Could)* — le lot visé est in
 - **EF-3 (M) [1]** — Les relations sont déclarées dans le front matter sous forme de listes d'IDs, avec un vocabulaire fermé : `refines`, `satisfies`, `verifies`, `dependsOn`, `supersedes`, `impacts`, `documents`. Toute autre clé de relation est rejetée par la validation.
 - **EF-4 (M) [1]** — Les statuts autorisés et leurs transitions sont définis par le schéma : `Draft → Review → Approved → Deprecated` (+ `Generated` pour un Asset produit par un Processor et non revu).
 - **EF-5 (M) [1]** — Granularité : un fichier par Asset, y compris `AcceptanceCriteria` et `TestCase` (adressables individuellement), regroupés par répertoire de leur parent.
-- **EF-6 (S) [1]** — Un Asset peut porter une référence externe libre `externalRef` (URL ou clé Jira) non validée sémantiquement.
+- **EF-6 (S) [1]** — Un Asset peut porter une ou plusieurs références externes libres `externalRef` (URL ou clé Jira, chaîne ou liste) non validées sémantiquement ; elles sont restituées (sommaire, viewer).
 - **EF-7 (M) [1]** — Le bloc `ai:` de provenance (`generated`, `processor`, `processorVersion`, `reviewed`, `reviewedBy`, `reviewedAt`) est obligatoire dès qu'un Asset est produit ou modifié par un Processor non humain.
 - **EF-8 (M) [2]** — `WorkItem` porte un champ `workItemType: Epic | UserStory | Bug`. Une UserStory `refines` un Epic ; un Bug `impacts` les Assets défaillants (Specification, BusinessRule…) et `dependsOn` son test de non-régression.
 - **EF-9 (M) [3]** — La chaîne amont est modélisée par les relations : `Goal refines Vision`, `Roadmap satisfies Goal`, `Epic satisfies Roadmap|Goal`. Un élément de roadmap sans Goal est signalé par la couverture.
