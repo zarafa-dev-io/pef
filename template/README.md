@@ -31,3 +31,12 @@ npm run pef -- summary                        # régénère product/README.md, l
 ```
 
 L'exemple `product/` déroule la chaîne complète Vision → Goal → Epic → UserStory → Requirement/BusinessRule/NFR → Specification → AcceptanceCriteria → TestPlan → TestCase, plus deux Decisions. Remplacez-le par vos propres Assets en conservant les conventions (voir `docs/reference.md` du monorepo).
+
+## Démarrer — y compris depuis un code existant
+
+Dans le chat Copilot, **`/start-project`** diagnostique le dépôt puis vous guide :
+
+- **De zéro** : vision → personas → roadmap → backlog → spécifications → tests, une étape à la fois, revue entre chacune.
+- **Code existant (rétro-documentation)** : inventaire et découpage en **domaines fonctionnels** (le plan vit en backlog — un Epic par domaine, une US avec checklist, reprise session après session), puis par domaine : `/reconstruct-technical-doc` → `/extract-business-rules` (`observed`/`inferred`, validation métier exigée sur l'inféré) → `/reconstruct-functional-doc` → `/draft-regression-test-plan` (tests de caractérisation qui figent l'existant). Prérequis : le code ouvert dans le même workspace VS Code (multi-root). Agnostique au langage — du TypeScript au COBOL.
+
+À la fin d'une rétro-doc, le dépôt a la même structure qu'un projet né de zéro : même vue par domaine (`pef summary`), même traçabilité, même détection de péremption.
