@@ -22,6 +22,7 @@ const FRAMEWORK_PATHS = [
   'schemas',
   'tools',
   'processors',
+  'viewer',
   '.github/copilot-instructions.md',
   '.github/instructions',
   '.github/prompts',

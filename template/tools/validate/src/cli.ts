@@ -6,7 +6,7 @@ import { runCoverage } from './commands/coverage.js';
 import { runTrace } from './commands/trace.js';
 import { runImpact } from './commands/impact.js';
 import { computeActions, applyActions } from './commands/signal.js';
-import { buildSummary } from './commands/summary.js';
+import { buildAssetIndex, buildSummary } from './commands/summary.js';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
@@ -91,6 +91,7 @@ switch (command) {
     const gaps = runCoverage(assets, graph);
     const outFile = path.join(root, 'README.md');
     fs.writeFileSync(outFile, buildSummary(assets, graph, gaps), 'utf8');
+    fs.writeFileSync(path.join(root, 'asset-index.json'), buildAssetIndex(assets), 'utf8');
     console.log(`${outFile}: ${assets.length} asset(s) indexed, ${gaps.length} gap(s) reported.`);
     process.exit(0);
   }

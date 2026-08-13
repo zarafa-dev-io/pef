@@ -25,6 +25,12 @@ flowchart LR
   classDef wip fill:#e9edfc,stroke:#2743D9,color:#131519
   classDef todo fill:#efefea,stroke:#8a9099,color:#565b63
   class EPIC_001 wip
+  click VIS_001 "#/vision/VIS-001-vision-produit.vis.md" "VIS-001"
+  click GOAL_001 "#/goals/GOAL-001-referentiel-fiable.goal.md" "GOAL-001"
+  click RM_001 "#/roadmap/RM-001-socle-referentiel.rm.md" "RM-001"
+  click RM_002 "#/roadmap/RM-002-fiabilite-donnees.rm.md" "RM-002"
+  click RM_003 "#/roadmap/RM-003-exploitation.rm.md" "RM-003"
+  click EPIC_001 "#/backlog/EPIC-001-gestion-des-clients.epic.md" "EPIC-001"
 ```
 
 ### Gestion des fiches clients ([EPIC-001](backlog/EPIC-001-gestion-des-clients.epic.md))

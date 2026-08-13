@@ -49,6 +49,21 @@ const domainType = (asset: ParsedAsset): string | null => {
   return DOMAIN_TYPE_ORDER.includes(fm.assetType as never) ? String(fm.assetType) : null;
 };
 
+/** id -> file map consumed by the embedded viewer (viewer/) to linkify every asset ID. */
+export function buildAssetIndex(assets: ParsedAsset[]): string {
+  const index: Record<string, { path: string; title: string; type: string; status: string }> = {};
+  for (const asset of assets) {
+    if (!asset.fm || typeof asset.fm.id !== 'string') continue;
+    index[asset.fm.id] = {
+      path: asset.rel,
+      title: String(asset.fm.title ?? ''),
+      type: String(asset.fm.assetType === 'WorkItem' ? asset.fm.workItemType : asset.fm.assetType),
+      status: String(asset.fm.status ?? ''),
+    };
+  }
+  return JSON.stringify(index, null, 2);
+}
+
 /** Deterministic product summary (French content, NFR-5) written to product/README.md. */
 export function buildSummary(assets: ParsedAsset[], graph: AssetGraph, gaps: Gap[]): string {
   const valid = assets.filter((a) => a.fm && typeof a.fm.id === 'string');
@@ -153,6 +168,11 @@ export function buildSummary(assets: ParsedAsset[], graph: AssetGraph, gaps: Gap
     const rest = epics.filter((e) => e.fm!.workflowState === 'Drafting' || e.fm!.workflowState === 'Todo')
       .map((e) => nodeId(String(e.fm!.id))).join(',');
     if (rest) m.push(`  class ${rest} todo`);
+    // Navigation : honorée par le viewer embarqué (viewer/), ignorée par GitHub
+    // (securityLevel strict) — sans dégât dans les deux cas.
+    for (const asset of [vision, ...goals, ...roadmapElements, ...epics]) {
+      if (asset) m.push(`  click ${nodeId(String(asset.fm!.id))} "#/${asset.rel}" "${asset.fm!.id}"`);
+    }
     m.push('```');
     out.push(...m, '');
   }

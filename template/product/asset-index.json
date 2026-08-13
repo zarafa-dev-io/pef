@@ -1,0 +1,170 @@
+{
+  "BUG-001": {
+    "path": "backlog/BUG-001-doublon-casse-email.bug.md",
+    "title": "Doublon créé quand l'email ne diffère que par la casse",
+    "type": "Bug",
+    "status": "Approved"
+  },
+  "EPIC-001": {
+    "path": "backlog/EPIC-001-gestion-des-clients.epic.md",
+    "title": "Gestion des fiches clients",
+    "type": "Epic",
+    "status": "Approved"
+  },
+  "US-001": {
+    "path": "backlog/US-001-creer-un-client.us.md",
+    "title": "Créer une fiche client",
+    "type": "UserStory",
+    "status": "Approved"
+  },
+  "DEC-001": {
+    "path": "decisions/DEC-001-prefixes-ids-et-suffixes.dec.md",
+    "title": "Préfixes d'IDs, suffixes de fichiers et interdiction de renumérotation",
+    "type": "Decision",
+    "status": "Approved"
+  },
+  "DEC-002": {
+    "path": "decisions/DEC-002-gherkin-recommande.dec.md",
+    "title": "Gherkin recommandé mais non obligatoire pour les AcceptanceCriteria",
+    "type": "Decision",
+    "status": "Approved"
+  },
+  "DEC-003": {
+    "path": "decisions/DEC-003-versioning-semantique.dec.md",
+    "title": "Sémantique du versioning des Assets et non-invalidation automatique de l'aval",
+    "type": "Decision",
+    "status": "Approved"
+  },
+  "DEC-004": {
+    "path": "decisions/DEC-004-priorisation-moscow.dec.md",
+    "title": "Priorisation des WorkItems par champ MoSCoW, ordonnancement fin hors PEF",
+    "type": "Decision",
+    "status": "Approved"
+  },
+  "DEC-005": {
+    "path": "decisions/DEC-005-roadmap-par-element.dec.md",
+    "title": "La Roadmap est un Asset par élément, pas un document monolithique",
+    "type": "Decision",
+    "status": "Approved"
+  },
+  "DEC-006": {
+    "path": "decisions/DEC-006-acces-code-multiroot.dec.md",
+    "title": "Accès au code par workspace multi-root et format des codeRefs",
+    "type": "Decision",
+    "status": "Approved"
+  },
+  "DOC-001": {
+    "path": "documentation/fonctionnelle/DOC-001-gestion-clients-fonctionnelle.doc.md",
+    "title": "Documentation fonctionnelle — gestion des fiches clients",
+    "type": "Documentation",
+    "status": "Approved"
+  },
+  "DOC-002": {
+    "path": "documentation/onboarding/DOC-002-parcours-onboarding.doc.md",
+    "title": "Parcours d'onboarding — découvrir Clientis par les Assets",
+    "type": "Documentation",
+    "status": "Approved"
+  },
+  "GOAL-001": {
+    "path": "goals/GOAL-001-referentiel-fiable.goal.md",
+    "title": "Un référentiel clients fiable et sans doublon",
+    "type": "Goal",
+    "status": "Approved"
+  },
+  "PER-001": {
+    "path": "personas/PER-001-gerant-tpe.per.md",
+    "title": "Persona — Camille, gérant de TPE",
+    "type": "Persona",
+    "status": "Approved"
+  },
+  "TC-001": {
+    "path": "quality/TP-001-recette-creation-client/TC-001-creation-nominale.tc.md",
+    "title": "Créer un client avec des données valides",
+    "type": "TestCase",
+    "status": "Approved"
+  },
+  "TC-002": {
+    "path": "quality/TP-001-recette-creation-client/TC-002-email-invalide.tc.md",
+    "title": "Rejeter un email au format invalide",
+    "type": "TestCase",
+    "status": "Approved"
+  },
+  "TC-003": {
+    "path": "quality/TP-001-recette-creation-client/TC-003-email-duplique.tc.md",
+    "title": "Rejeter un email déjà connu (insensible à la casse)",
+    "type": "TestCase",
+    "status": "Approved"
+  },
+  "TP-001": {
+    "path": "quality/TP-001-recette-creation-client/TP-001-recette-creation-client.tp.md",
+    "title": "Plan de recette — création d'une fiche client",
+    "type": "TestPlan",
+    "status": "Approved"
+  },
+  "REL-001": {
+    "path": "releases/REL-001-version-0-1.rel.md",
+    "title": "Release 0.1 — création de fiches clients fiable",
+    "type": "Release",
+    "status": "Approved"
+  },
+  "BR-001": {
+    "path": "requirements/BR-001-email-unique.br.md",
+    "title": "L'adresse email d'un client est unique dans le référentiel",
+    "type": "BusinessRule",
+    "status": "Approved"
+  },
+  "NFR-001": {
+    "path": "requirements/NFR-001-temps-de-reponse.nfr.md",
+    "title": "Temps de réponse de la création d'un client",
+    "type": "NonFunctionalRequirement",
+    "status": "Approved"
+  },
+  "REQ-001": {
+    "path": "requirements/REQ-001-creation-client.req.md",
+    "title": "Création d'un client avec contrôle des données de contact",
+    "type": "Requirement",
+    "status": "Approved"
+  },
+  "RM-001": {
+    "path": "roadmap/RM-001-socle-referentiel.rm.md",
+    "title": "Élément de roadmap — Socle référentiel clients (T1 2026)",
+    "type": "Roadmap",
+    "status": "Approved"
+  },
+  "RM-002": {
+    "path": "roadmap/RM-002-fiabilite-donnees.rm.md",
+    "title": "Élément de roadmap — Fiabilité des données (T2 2026)",
+    "type": "Roadmap",
+    "status": "Approved"
+  },
+  "RM-003": {
+    "path": "roadmap/RM-003-exploitation.rm.md",
+    "title": "Élément de roadmap — Exploitation (T3 2026)",
+    "type": "Roadmap",
+    "status": "Approved"
+  },
+  "AC-001": {
+    "path": "specifications/SPEC-001-creation-client/AC-001-creation-nominale.ac.md",
+    "title": "Création nominale d'une fiche client",
+    "type": "AcceptanceCriteria",
+    "status": "Approved"
+  },
+  "AC-002": {
+    "path": "specifications/SPEC-001-creation-client/AC-002-email-invalide-ou-duplique.ac.md",
+    "title": "Rejet d'un email invalide ou déjà connu",
+    "type": "AcceptanceCriteria",
+    "status": "Approved"
+  },
+  "SPEC-001": {
+    "path": "specifications/SPEC-001-creation-client/SPEC-001-creation-client.spec.md",
+    "title": "Spécification — création d'une fiche client",
+    "type": "Specification",
+    "status": "Approved"
+  },
+  "VIS-001": {
+    "path": "vision/VIS-001-vision-produit.vis.md",
+    "title": "Vision produit — Clientis, le référentiel clients des TPE",
+    "type": "Vision",
+    "status": "Approved"
+  }
+}

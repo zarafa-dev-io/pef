@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>PEF — Explorateur du produit</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <style>
+    :root { --theme-color: #2743D9; }
+    .pef-card {
+      background: #f5f5f1; border: 1px solid #e4e5df; border-radius: 12px;
+      padding: 12px 16px; margin: 0 0 1.5em; font-size: 13px; line-height: 1.7;
+    }
+    .pef-card b { color: #131519; }
+    .pef-badge {
+      display: inline-block; border-radius: 6px; padding: 1px 8px; margin-left: 6px;
+      font-size: 11px; font-weight: 600; background: #e9edfc; color: #2743D9;
+    }
+    .pef-badge.approved { background: #e6f4ea; color: #1F8A5B; }
+    .pef-badge.generated, .pef-badge.review { background: #fbf0dc; color: #b0740e; }
+  </style>
+</head>
+<body>
+  <div id="app">Chargement de l'explorateur…</div>
+  <script>
+    // ── Explorateur PEF : sert product/ en local (npx serve à la racine du repo,
+    //    puis http://localhost:3000/viewer/). Ne pas publier pour une instance :
+    //    la connaissance produit est privée.
+    const ID_RE = '\\b(?:VIS|GOAL|RM|PER|EPIC|US|BUG|REQ|BR|NFR|SPEC|AC|TP|TC|DEC|REL|DOC)-\\d{3,}\\b';
+    const RELATION_KEYS = ['refines', 'satisfies', 'verifies', 'dependsOn', 'supersedes', 'impacts', 'documents'];
+    let pefIndex = null;
+
+    const loadIndex = () =>
+      pefIndex ? Promise.resolve(pefIndex)
+        : fetch('../product/asset-index.json')
+            .then((r) => (r.ok ? r.json() : {}))
+            .catch(() => ({}))
+            .then((data) => (pefIndex = data));
+
+    const linkId = (id) => {
+      const entry = pefIndex && pefIndex[id];
+      return entry ? `[${id}](/${entry.path} "${(entry.title || '').replace(/"/g, "'")}")` : id;
+    };
+
+    // Linkifie les IDs hors blocs de code et hors liens déjà formés
+    const linkify = (text) =>
+      text.split(/(```[\s\S]*?```|`[^`\n]*`)/g).map((segment, i) =>
+        i % 2 === 1 ? segment
+          : segment.replace(new RegExp(`\\[[^\\]]*\\]\\([^)]*\\)|${ID_RE}`, 'g'),
+              (m) => (m.startsWith('[') ? m : linkId(m)))
+      ).join('');
+
+    // Transforme le front matter YAML en bandeau lisible et navigable
+    const renderFrontMatter = (content) => {
+      const match = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/.exec(content);
+      if (!match) return content;
+      const fm = {};
+      let lastKey = null;
+      for (const line of match[1].split(/\r?\n/)) {
+        const kv = /^(\w+):\s*(.*)$/.exec(line);
+        if (kv) { fm[kv[1]] = kv[2].trim(); lastKey = kv[1]; }
+        else if (/^\s+/.test(line) && lastKey) { fm[lastKey] += ' ' + line.trim(); }
+      }
+      const status = (fm.status || '').replace(/["']/g, '');
+      const parts = [
+        `<b>${fm.id || '?'}</b> · ${fm.workItemType || fm.docType ? (fm.workItemType || fm.docType) + ' ' : ''}${fm.assetType || ''}`,
+        `v${(fm.version || '?').replace(/["']/g, '')}`,
+        `<span class="pef-badge ${status.toLowerCase()}">${status}</span>`,
+      ];
+      if (fm.priority) parts.push(`priorité ${fm.priority}`);
+      if (fm.workflowState) parts.push(`réalisation ${fm.workflowState}`);
+      const relations = RELATION_KEYS
+        .filter((k) => fm[k])
+        .map((k) => `${k} → ${(fm[k].match(new RegExp(ID_RE, 'g')) || []).map(linkId).join(', ')}`);
+      const banner = `<div class="pef-card">${parts.join(' · ')}${
+        relations.length ? '<br>' + relations.join(' &nbsp;·&nbsp; ') : ''}${
+        fm.ai ? '' : ''}</div>\n\n`;
+      return banner + content.slice(match[0].length);
+    };
+
+    window.$docsify = {
+      name: 'Produit — Explorateur PEF',
+      basePath: '../product/',
+      homepage: 'README.md',
+      auto2top: true,
+      search: { placeholder: 'Rechercher…', noData: 'Aucun résultat', depth: 3 },
+      plugins: [
+        function (hook) {
+          hook.beforeEach(function (content, next) {
+            loadIndex().then(() => next(linkify(renderFrontMatter(content))));
+          });
+          hook.doneEach(function () {
+            // Rendu Mermaid avec navigation active (les "click" du sommaire)
+            document.querySelectorAll('pre[data-lang="mermaid"]').forEach((pre, i) => {
+              const container = document.createElement('div');
+              container.className = 'mermaid';
+              container.textContent = pre.innerText;
+              pre.replaceWith(container);
+            });
+            if (window.mermaid) {
+              window.mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: 'neutral' });
+              window.mermaid.run({ nodes: document.querySelectorAll('.mermaid') }).catch(() => {});
+            }
+          });
+        },
+      ],
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</body>
+</html>

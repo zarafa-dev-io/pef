@@ -119,7 +119,7 @@ Génère **`product/README.md`** en deux parties :
 1. **La vue par domaine fonctionnel** (la restitution de référence, DEC-008) — ouverte par la **carte du produit** (diagramme Mermaid rendu nativement par GitHub : Vision → Objectifs → Roadmap → Domaines, chaque domaine coloré selon son état de réalisation avec son nombre d'Assets) — puis, pour chaque domaine : un domaine = un Epic, et sous lui tout ce que le graphe y rattache — US, bugs, exigences, règles, specs, critères, tests, documentation — avec la chaîne stratégique (« sert RM-001 → GOAL-001 ») et la **couverture propre au domaine** (`✔ complète` ou les trous). Les Assets métier sans Epic apparaissent en « Hors domaine ». C'est la vue qui raconte le produit ; elle est calculée depuis les relations, donc jamais désynchronisée.
 2. **L'inventaire par type** : la vue exhaustive « modèle » (vision → … → documentation), avec les colonnes utiles par famille (priorité et réalisation des WorkItems, état à jour/périmée des Documentations).
 
-GitHub l'affiche automatiquement en tête du répertoire `product/`.
+GitHub l'affiche automatiquement en tête du répertoire `product/`. La commande génère aussi `product/asset-index.json`, l'index de navigation de l'**explorateur embarqué** (`viewer/`) : servi en local (`npx serve .` puis `/viewer/`), il rend la carte Mermaid **cliquable**, affiche le front matter en bandeau navigable et transforme **tout ID d'Asset mentionné en lien** — la restitution la plus navigable, réservée à un usage local pour une instance (connaissance privée).
 
 La CI le **régénère à chaque push** (job `summary`) : le sommaire ne ment jamais, il n'est pas maintenu à la main. Sortie 100 % déterministe, aucune IA (NFR-1).
 
