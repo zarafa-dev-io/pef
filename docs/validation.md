@@ -114,7 +114,12 @@ Liste la fermeture aval complète — tout ce qui, directement ou indirectement,
 npm run pef -- summary
 ```
 
-Génère **`product/README.md`** : l'index de tous les Assets, groupés dans l'ordre de lecture (vision → objectifs → roadmap → backlog → exigences → specs → recette → décisions → releases → documentation), avec pour chacun son lien, son statut et sa version — plus les colonnes utiles par famille (priorité et réalisation des WorkItems, état à jour/périmée des Documentations). GitHub l'affiche automatiquement en tête du répertoire `product/`.
+Génère **`product/README.md`** en deux parties :
+
+1. **La vue par domaine fonctionnel** (la restitution de référence, DEC-008) : un domaine = un Epic, et sous lui tout ce que le graphe y rattache — US, bugs, exigences, règles, specs, critères, tests, documentation — avec la chaîne stratégique (« sert RM-001 → GOAL-001 ») et la **couverture propre au domaine** (`✔ complète` ou les trous). Les Assets métier sans Epic apparaissent en « Hors domaine ». C'est la vue qui raconte le produit ; elle est calculée depuis les relations, donc jamais désynchronisée.
+2. **L'inventaire par type** : la vue exhaustive « modèle » (vision → … → documentation), avec les colonnes utiles par famille (priorité et réalisation des WorkItems, état à jour/périmée des Documentations).
+
+GitHub l'affiche automatiquement en tête du répertoire `product/`.
 
 La CI le **régénère à chaque push** (job `summary`) : le sommaire ne ment jamais, il n'est pas maintenu à la main. Sortie 100 % déterministe, aucune IA (NFR-1).
 

@@ -90,7 +90,7 @@ switch (command) {
     const graph = buildGraph(assets);
     const gaps = runCoverage(assets, graph);
     const outFile = path.join(root, 'README.md');
-    fs.writeFileSync(outFile, buildSummary(assets, gaps), 'utf8');
+    fs.writeFileSync(outFile, buildSummary(assets, graph, gaps), 'utf8');
     console.log(`${outFile}: ${assets.length} asset(s) indexed, ${gaps.length} gap(s) reported.`);
     process.exit(0);
   }
