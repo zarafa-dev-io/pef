@@ -144,11 +144,10 @@ Vous verrez d'où il vient (en remontant : exigence ← user story ← epic ← 
 
 ## 6. Créer votre premier Asset à la main
 
-Créons une exigence. Copiez le modèle le plus proche :
+Créons une exigence. Partez du **template** de son type (chaque assetType a le sien dans `templates/`, personnalisable par votre projet) :
 
 ```bash
-cp product/requirements/REQ-001-creation-client.req.md \
-   product/requirements/REQ-002-recherche-client.req.md
+cp templates/req.template.md product/requirements/REQ-002-recherche-client.req.md
 ```
 
 Éditez le nouveau fichier :

@@ -17,7 +17,8 @@ import { fileURLToPath } from 'node:url';
 const TEMPLATE_REPO = process.env.PEF_TEMPLATE_REPO ?? 'https://github.com/zarafa-dev-io/pef.git';
 
 // La frontière de propriété : SEULS ces chemins appartiennent au framework.
-// product/ et README.md appartiennent au projet et ne sont jamais listés ici.
+// product/, README.md et templates/ appartiennent au projet (les templates
+// sont la forme personnalisée des Assets) et ne sont jamais listés ici.
 const FRAMEWORK_PATHS = [
   'schemas',
   'tools',
@@ -26,6 +27,7 @@ const FRAMEWORK_PATHS = [
   '.github/copilot-instructions.md',
   '.github/instructions',
   '.github/prompts',
+  '.github/skills',
   '.github/workflows/pef-validate.yml',
 ];
 

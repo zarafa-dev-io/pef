@@ -13,6 +13,8 @@ Ce dépôt est un projet **PEF (Product Engineering Framework)** : la connaissan
 
 ## Règles pour l'IA (vous)
 
+- **Tout nouvel Asset part du template du projet** : `templates/<suffixe>.template.md` (skill `pef-asset-authoring`). Ces templates sont personnalisables par le projet — leur forme fait foi ; conservez toutes leurs sections.
+
 - Tout Asset que vous créez ou modifiez porte `status: Generated` et le bloc de provenance :
   ```yaml
   ai:
